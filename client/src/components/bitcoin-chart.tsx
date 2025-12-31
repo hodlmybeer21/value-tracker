@@ -66,13 +66,6 @@ export function BitcoinChart({ item }: BitcoinChartProps) {
                if (value >= 0.001) return value.toFixed(3);
                return value.toExponential(1);
             }}
-            label={{ 
-              value: 'Cost in BTC (Log Scale)', 
-              angle: -90, 
-              position: 'insideLeft', 
-              style: { fill: 'hsl(24, 95%, 53%)', textAnchor: 'middle' },
-              dx: 10
-            }}
           />
 
           <Tooltip 
