@@ -61,13 +61,6 @@ export function CostChart({ item }: CostChartProps) {
             dx={-10}
             style={{ fontSize: '12px', fontFamily: 'var(--font-mono)' }}
             tickFormatter={(value) => `$${value.toLocaleString()}`}
-            label={{ 
-              value: 'Price (USD)', 
-              angle: -90, 
-              position: 'insideLeft', 
-              style: { fill: 'hsl(142, 70%, 45%)', textAnchor: 'middle' },
-              dx: 0
-            }}
           />
 
           {/* Right Axis: Gold */}
@@ -80,14 +73,6 @@ export function CostChart({ item }: CostChartProps) {
             dx={10}
             style={{ fontSize: '12px', fontFamily: 'var(--font-mono)' }}
             tickFormatter={(value) => `${value.toFixed(3)} oz`}
-            label={{ 
-              value: 'Cost in Gold (oz)', 
-              angle: 90, 
-              position: 'insideRight', 
-              style: { fill: 'hsl(45, 93%, 47%)', textAnchor: 'middle' },
-              dy: 0,
-              dx: 40 // Increased offset to prevent overlap
-            }}
           />
 
           {/* Secondary Right Axis: BTC (Hidden axis line/ticks to reduce clutter, but used for scaling) */}
