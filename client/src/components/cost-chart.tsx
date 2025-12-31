@@ -55,7 +55,7 @@ export function CostChart({ item }: CostChartProps) {
           <YAxis 
             yAxisId="left-usd"
             orientation="left"
-            stroke="hsl(var(--primary))"
+            stroke="hsl(142, 70%, 45%)"
             tickLine={false}
             axisLine={false}
             dx={-10}
@@ -65,7 +65,7 @@ export function CostChart({ item }: CostChartProps) {
               value: 'Price (USD)', 
               angle: -90, 
               position: 'insideLeft', 
-              style: { fill: 'hsl(var(--primary))', textAnchor: 'middle' },
+              style: { fill: 'hsl(142, 70%, 45%)', textAnchor: 'middle' },
               dx: 0
             }}
           />
@@ -74,7 +74,7 @@ export function CostChart({ item }: CostChartProps) {
           <YAxis 
             yAxisId="right-gold"
             orientation="right"
-            stroke="hsl(var(--chart-2))"
+            stroke="hsl(45, 93%, 47%)"
             tickLine={false}
             axisLine={false}
             dx={10}
@@ -84,7 +84,7 @@ export function CostChart({ item }: CostChartProps) {
               value: 'Cost in Gold (oz)', 
               angle: 90, 
               position: 'insideRight', 
-              style: { fill: 'hsl(var(--chart-2))', textAnchor: 'middle' },
+              style: { fill: 'hsl(45, 93%, 47%)', textAnchor: 'middle' },
               dy: -20
             }}
           />
@@ -93,7 +93,7 @@ export function CostChart({ item }: CostChartProps) {
           <YAxis 
             yAxisId="right-btc"
             orientation="right"
-            stroke="hsl(var(--chart-3))"
+            stroke="hsl(24, 95%, 53%)"
             hide={true} // Hidden visual axis, but used for scaling the orange line
             domain={['auto', 'auto']}
           />
@@ -120,7 +120,7 @@ export function CostChart({ item }: CostChartProps) {
                       return (
                         <div key={entry.name} className="flex items-center justify-between gap-8 mb-1">
                           <span className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
+                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.stroke }} />
                             <span className="text-foreground font-medium">{entry.name}</span>
                           </span>
                           <span className="text-foreground">
@@ -147,9 +147,9 @@ export function CostChart({ item }: CostChartProps) {
             type="monotone"
             dataKey="rawUSD"
             name="USD Price"
-            stroke="hsl(var(--primary))"
+            stroke="hsl(142, 70%, 45%)"
             strokeWidth={3}
-            dot={{ r: 4, fill: "hsl(var(--primary))", strokeWidth: 0 }}
+            dot={{ r: 4, fill: "hsl(142, 70%, 45%)", strokeWidth: 0 }}
             activeDot={{ r: 6 }}
           />
           <Line
@@ -157,9 +157,9 @@ export function CostChart({ item }: CostChartProps) {
             type="monotone"
             dataKey="rawGold"
             name="Gold Cost"
-            stroke="hsl(var(--chart-2))"
+            stroke="hsl(45, 93%, 47%)"
             strokeWidth={3}
-            dot={{ r: 4, fill: "hsl(var(--chart-2))", strokeWidth: 0 }}
+            dot={{ r: 4, fill: "hsl(45, 93%, 47%)", strokeWidth: 0 }}
             activeDot={{ r: 6 }}
           />
           <Line
@@ -167,9 +167,9 @@ export function CostChart({ item }: CostChartProps) {
             type="monotone"
             dataKey="rawBTC"
             name="Bitcoin Cost"
-            stroke="hsl(var(--chart-3))"
+            stroke="hsl(24, 95%, 53%)"
             strokeWidth={3}
-            dot={{ r: 4, fill: "hsl(var(--chart-3))", strokeWidth: 0 }}
+            dot={{ r: 4, fill: "hsl(24, 95%, 53%)", strokeWidth: 0 }}
             activeDot={{ r: 6 }}
           />
         </LineChart>
