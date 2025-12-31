@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ITEMS } from "@/data/items";
 import { CostChart } from "@/components/cost-chart";
+import { BitcoinChart } from "@/components/bitcoin-chart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import background from "@assets/generated_images/subtle_dark_financial_data_visualization_abstract_background.png";
@@ -87,6 +88,22 @@ export default function Home() {
               <span className="inline-block w-3 h-3 rounded-full bg-chart-3 mr-2 align-middle"></span>Falling line = Cheaper (Purchasing Power Gained)
             </div>
           </CardContent>
+        </Card>
+
+        {/* Bitcoin Zoom Chart */}
+        <Card className="border-border bg-card/40 backdrop-blur-md shadow-2xl mb-12 overflow-hidden border-t-4 border-t-[hsl(24,95%,53%)]">
+           <CardContent className="p-6 md:p-8">
+            <div className="mb-6">
+                <h2 className="text-2xl font-bold flex items-center gap-2 text-[hsl(24,95%,53%)]">
+                  <span className="text-3xl">₿</span>
+                  Bitcoin Deflationary View
+                </h2>
+                <p className="text-muted-foreground text-sm mt-1">
+                  A focused look at the cost in Bitcoin (Logarithmic Scale). This demonstrates the dramatic increase in Bitcoin's purchasing power over time.
+                </p>
+            </div>
+            <BitcoinChart item={selectedItem} />
+           </CardContent>
         </Card>
 
         {/* Explanation Section */}
