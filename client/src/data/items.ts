@@ -14,10 +14,6 @@ export interface ItemData {
   data: PriceDataPoint[];
 }
 
-// Helper to interpolate roughly for demo purposes if real data points are missing
-// In a real app, this would be fetched from the backend API we discussed.
-// For this frontend mockup, I am generating representative data.
-
 export const ITEMS: ItemData[] = [
   {
     id: "bread",
@@ -26,7 +22,17 @@ export const ITEMS: ItemData[] = [
     unit: "Loaf",
     emoji: "🍞",
     data: [
-      { year: 2010, itemPriceUSD: 1.39, goldPriceUSD: 1224, btcPriceUSD: 0.09 }, // BTC price is effectively 0 for comparison
+      { year: 1970, itemPriceUSD: 0.24, goldPriceUSD: 36, btcPriceUSD: null },
+      { year: 1975, itemPriceUSD: 0.36, goldPriceUSD: 161, btcPriceUSD: null },
+      { year: 1980, itemPriceUSD: 0.51, goldPriceUSD: 615, btcPriceUSD: null },
+      { year: 1985, itemPriceUSD: 0.55, goldPriceUSD: 317, btcPriceUSD: null },
+      { year: 1990, itemPriceUSD: 0.70, goldPriceUSD: 383, btcPriceUSD: null },
+      { year: 1995, itemPriceUSD: 0.79, goldPriceUSD: 384, btcPriceUSD: null },
+      { year: 2000, itemPriceUSD: 0.93, goldPriceUSD: 279, btcPriceUSD: null },
+      { year: 2005, itemPriceUSD: 1.05, goldPriceUSD: 444, btcPriceUSD: null },
+      { year: 2008, itemPriceUSD: 1.37, goldPriceUSD: 871, btcPriceUSD: null },
+      { year: 2009, itemPriceUSD: 1.39, goldPriceUSD: 972, btcPriceUSD: 0.0009 }, // Early BTC
+      { year: 2010, itemPriceUSD: 1.39, goldPriceUSD: 1224, btcPriceUSD: 0.09 }, 
       { year: 2011, itemPriceUSD: 1.45, goldPriceUSD: 1571, btcPriceUSD: 10 }, 
       { year: 2012, itemPriceUSD: 1.42, goldPriceUSD: 1668, btcPriceUSD: 13 },
       { year: 2013, itemPriceUSD: 1.40, goldPriceUSD: 1411, btcPriceUSD: 750 },
@@ -50,6 +56,16 @@ export const ITEMS: ItemData[] = [
     unit: "Gallon",
     emoji: "⛽",
     data: [
+      { year: 1970, itemPriceUSD: 0.36, goldPriceUSD: 36, btcPriceUSD: null },
+      { year: 1975, itemPriceUSD: 0.57, goldPriceUSD: 161, btcPriceUSD: null },
+      { year: 1980, itemPriceUSD: 1.19, goldPriceUSD: 615, btcPriceUSD: null },
+      { year: 1985, itemPriceUSD: 1.12, goldPriceUSD: 317, btcPriceUSD: null },
+      { year: 1990, itemPriceUSD: 1.16, goldPriceUSD: 383, btcPriceUSD: null },
+      { year: 1995, itemPriceUSD: 1.15, goldPriceUSD: 384, btcPriceUSD: null },
+      { year: 2000, itemPriceUSD: 1.51, goldPriceUSD: 279, btcPriceUSD: null },
+      { year: 2005, itemPriceUSD: 2.30, goldPriceUSD: 444, btcPriceUSD: null },
+      { year: 2008, itemPriceUSD: 3.27, goldPriceUSD: 871, btcPriceUSD: null },
+      { year: 2009, itemPriceUSD: 2.35, goldPriceUSD: 972, btcPriceUSD: 0.0009 },
       { year: 2010, itemPriceUSD: 2.78, goldPriceUSD: 1224, btcPriceUSD: 0.09 },
       { year: 2011, itemPriceUSD: 3.52, goldPriceUSD: 1571, btcPriceUSD: 10 },
       { year: 2012, itemPriceUSD: 3.60, goldPriceUSD: 1668, btcPriceUSD: 13 },
@@ -74,6 +90,16 @@ export const ITEMS: ItemData[] = [
     unit: "Home",
     emoji: "🏠",
     data: [
+      { year: 1970, itemPriceUSD: 23400, goldPriceUSD: 36, btcPriceUSD: null },
+      { year: 1975, itemPriceUSD: 39300, goldPriceUSD: 161, btcPriceUSD: null },
+      { year: 1980, itemPriceUSD: 64600, goldPriceUSD: 615, btcPriceUSD: null },
+      { year: 1985, itemPriceUSD: 84300, goldPriceUSD: 317, btcPriceUSD: null },
+      { year: 1990, itemPriceUSD: 122900, goldPriceUSD: 383, btcPriceUSD: null },
+      { year: 1995, itemPriceUSD: 133900, goldPriceUSD: 384, btcPriceUSD: null },
+      { year: 2000, itemPriceUSD: 169000, goldPriceUSD: 279, btcPriceUSD: null },
+      { year: 2005, itemPriceUSD: 240900, goldPriceUSD: 444, btcPriceUSD: null },
+      { year: 2008, itemPriceUSD: 232100, goldPriceUSD: 871, btcPriceUSD: null },
+      { year: 2009, itemPriceUSD: 216700, goldPriceUSD: 972, btcPriceUSD: 0.0009 },
       { year: 2010, itemPriceUSD: 221800, goldPriceUSD: 1224, btcPriceUSD: 0.09 },
       { year: 2011, itemPriceUSD: 227200, goldPriceUSD: 1571, btcPriceUSD: 10 },
       { year: 2012, itemPriceUSD: 238400, goldPriceUSD: 1668, btcPriceUSD: 13 },
@@ -98,6 +124,16 @@ export const ITEMS: ItemData[] = [
     unit: "Year",
     emoji: "🎓",
     data: [
+      { year: 1970, itemPriceUSD: 1800, goldPriceUSD: 36, btcPriceUSD: null },
+      { year: 1975, itemPriceUSD: 2400, goldPriceUSD: 161, btcPriceUSD: null },
+      { year: 1980, itemPriceUSD: 3600, goldPriceUSD: 615, btcPriceUSD: null },
+      { year: 1985, itemPriceUSD: 5400, goldPriceUSD: 317, btcPriceUSD: null },
+      { year: 1990, itemPriceUSD: 9340, goldPriceUSD: 383, btcPriceUSD: null },
+      { year: 1995, itemPriceUSD: 12200, goldPriceUSD: 384, btcPriceUSD: null },
+      { year: 2000, itemPriceUSD: 16000, goldPriceUSD: 279, btcPriceUSD: null },
+      { year: 2005, itemPriceUSD: 21000, goldPriceUSD: 444, btcPriceUSD: null },
+      { year: 2008, itemPriceUSD: 25000, goldPriceUSD: 871, btcPriceUSD: null },
+      { year: 2009, itemPriceUSD: 26200, goldPriceUSD: 972, btcPriceUSD: 0.0009 },
       { year: 2010, itemPriceUSD: 31000, goldPriceUSD: 1224, btcPriceUSD: 0.09 },
       { year: 2011, itemPriceUSD: 32500, goldPriceUSD: 1571, btcPriceUSD: 10 },
       { year: 2012, itemPriceUSD: 33500, goldPriceUSD: 1668, btcPriceUSD: 13 },
@@ -122,6 +158,16 @@ export const ITEMS: ItemData[] = [
     unit: "Dozen",
     emoji: "🥚",
     data: [
+      { year: 1970, itemPriceUSD: 0.61, goldPriceUSD: 36, btcPriceUSD: null },
+      { year: 1975, itemPriceUSD: 0.77, goldPriceUSD: 161, btcPriceUSD: null },
+      { year: 1980, itemPriceUSD: 0.84, goldPriceUSD: 615, btcPriceUSD: null },
+      { year: 1985, itemPriceUSD: 0.80, goldPriceUSD: 317, btcPriceUSD: null },
+      { year: 1990, itemPriceUSD: 1.00, goldPriceUSD: 383, btcPriceUSD: null },
+      { year: 1995, itemPriceUSD: 0.87, goldPriceUSD: 384, btcPriceUSD: null },
+      { year: 2000, itemPriceUSD: 0.91, goldPriceUSD: 279, btcPriceUSD: null },
+      { year: 2005, itemPriceUSD: 1.20, goldPriceUSD: 444, btcPriceUSD: null },
+      { year: 2008, itemPriceUSD: 2.20, goldPriceUSD: 871, btcPriceUSD: null },
+      { year: 2009, itemPriceUSD: 1.66, goldPriceUSD: 972, btcPriceUSD: 0.0009 },
       { year: 2010, itemPriceUSD: 1.66, goldPriceUSD: 1224, btcPriceUSD: 0.09 },
       { year: 2011, itemPriceUSD: 1.77, goldPriceUSD: 1571, btcPriceUSD: 10 },
       { year: 2012, itemPriceUSD: 1.80, goldPriceUSD: 1668, btcPriceUSD: 13 },
