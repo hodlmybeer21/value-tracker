@@ -1,0 +1,120 @@
+Below is a business-curated, user-first list of 20 items that make the app genuinely useful for understanding real-world cost of living and purchasing power over time.
+
+These are chosen based on:
+
+Emotional relevance (“I buy this”)
+
+Data availability going far back
+
+Coverage of daily life + major life milestones
+
+Clear storytelling when compared against Gold & Bitcoin
+
+✅ Core Everyday Items (High Relatability)
+
+Bread 🍞
+Baseline food inflation anchor
+
+Milk (1 gallon) 🥛
+Staple household purchase
+
+Eggs (dozen) 🥚
+Volatile, memorable price changes
+
+Gasoline (per gallon) ⛽
+One of the most emotionally felt costs
+
+Electricity (per kWh) ⚡
+Invisible but unavoidable cost
+
+Grocery Basket (CPI food index) 🛒
+Overall food purchasing power
+
+🏠 Housing & Living (Life-Defining Costs)
+
+Median Home Price 🏠
+Largest lifetime purchase for most people
+
+Apartment Rent (average) 🏢
+Relevant for younger users
+
+Property Taxes (average) 🧾
+Often overlooked but unavoidable
+
+Home Insurance 🛡️
+Quietly rising cost most don’t track
+
+🎓 Education & Upward Mobility
+
+College Tuition (public, in-state) 🎓
+One of the most shocking charts
+
+Student Loan Interest (avg rate) 📚
+Cost of borrowing education
+
+🚗 Transportation & Work
+
+New Car Price (average) 🚗
+Shows depreciation vs inflation
+
+Used Car Price (average) 🚙
+More relatable for most households
+
+Public Transit Fare 🚆
+Urban cost of living indicator
+
+🏥 Health & Family
+
+Health Insurance Premium (annual) 🏥
+Major stress point for families
+
+Doctor Visit (average cost) 🩺
+Simple, powerful health inflation metric
+
+📱 Modern Life Necessities
+
+Mobile Phone Plan (monthly) 📱
+Modern essential, good contrast vs deflation
+
+Internet Service (monthly) 🌐
+Required for work, school, life
+
+💼 Work & Time (High Insight)
+
+Average Hourly Wage ⏱️
+Allows users to see if wages kept up
+
+This item is especially powerful when inverted:
+“How many hours of work does this cost?”
+
+Why This List Is Strong (Strategically)
+
+Covers daily survival, life milestones, and modern necessities
+
+Creates “aha” moments when compared to gold & bitcoin
+
+Keeps political bias low
+
+Enables future features like:
+
+“Hours of work required”
+
+“Gold-denominated cost”
+
+“Bitcoin-denominated cost”
+
+Recommended Build Order (Smart Execution)
+
+Bread
+
+Gasoline
+
+Median Home Price
+
+College Tuition
+
+Grocery Basket
+
+Average Hourly Wage
+
+These six alone tell a complete story.
