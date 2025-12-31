@@ -9,7 +9,6 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ItemData } from "@/data/items";
 
 interface CostChartProps {
@@ -18,24 +17,11 @@ interface CostChartProps {
 
 export function CostChart({ item }: CostChartProps) {
   const chartData = useMemo(() => {
-    // 1. Find the base year. 
-    // We want a base year where BTC data is "reasonable" or just the first one.
-    // Let's stick to the prompt's suggestion: Indexed to 100 at earliest common date.
-    // Our data has BTC from 2010, but it was pennies. 
-    // Let's just take the first data point as base for simplicity for now.
     if (!item.data.length) return [];
-
-    const base = item.data[0];
-    
-    // Base Costs
-    const baseCostUSD = base.itemPriceUSD;
-    const baseCostGold = base.itemPriceUSD / base.goldPriceUSD;
-    // Handle BTC being null or zero? Our data has numbers.
-    const baseCostBTC = base.btcPriceUSD ? base.itemPriceUSD / base.btcPriceUSD : null;
 
     return item.data.map((point) => {
       const costUSD = point.itemPriceUSD;
-      const costGold = point.itemPriceUSD / point.goldPriceUSD;
+      const costGold = point.itemPriceUSD / point.goldPriceUSD; // Ounces of gold
       const costBTC = point.btcPriceUSD ? point.itemPriceUSD / point.btcPriceUSD : null;
 
       return {
@@ -43,10 +29,6 @@ export function CostChart({ item }: CostChartProps) {
         rawUSD: costUSD,
         rawGold: costGold,
         rawBTC: costBTC,
-        // Indexed Values (100 = Base)
-        indexUSD: (costUSD / baseCostUSD) * 100,
-        indexGold: (costGold / baseCostGold) * 100,
-        indexBTC: (baseCostBTC && costBTC) ? (costBTC / baseCostBTC) * 100 : null,
       };
     });
   }, [item]);
@@ -59,6 +41,7 @@ export function CostChart({ item }: CostChartProps) {
           margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted-foreground) / 0.2)" vertical={false} />
+          
           <XAxis 
             dataKey="year" 
             stroke="hsl(var(--muted-foreground))" 
@@ -67,69 +50,123 @@ export function CostChart({ item }: CostChartProps) {
             dy={10}
             style={{ fontSize: '12px', fontFamily: 'var(--font-mono)' }}
           />
+
+          {/* Left Axis: USD */}
           <YAxis 
-            stroke="hsl(var(--muted-foreground))" 
+            yAxisId="left-usd"
+            orientation="left"
+            stroke="hsl(var(--primary))"
             tickLine={false}
             axisLine={false}
             dx={-10}
             style={{ fontSize: '12px', fontFamily: 'var(--font-mono)' }}
-            domain={['auto', 'auto']}
-            // Log scale might be needed if BTC drops too hard, but prompt said linear first.
-            // Let's stick to linear.
+            tickFormatter={(value) => `$${value.toLocaleString()}`}
+            label={{ 
+              value: 'Price (USD)', 
+              angle: -90, 
+              position: 'insideLeft', 
+              style: { fill: 'hsl(var(--primary))', textAnchor: 'middle' },
+              dx: 0
+            }}
           />
+
+          {/* Right Axis: Gold */}
+          <YAxis 
+            yAxisId="right-gold"
+            orientation="right"
+            stroke="hsl(var(--chart-2))"
+            tickLine={false}
+            axisLine={false}
+            dx={10}
+            style={{ fontSize: '12px', fontFamily: 'var(--font-mono)' }}
+            tickFormatter={(value) => `${value.toFixed(3)} oz`}
+            label={{ 
+              value: 'Cost in Gold (oz)', 
+              angle: 90, 
+              position: 'insideRight', 
+              style: { fill: 'hsl(var(--chart-2))', textAnchor: 'middle' },
+              dy: -20
+            }}
+          />
+
+          {/* Secondary Right Axis: BTC (Hidden axis line/ticks to reduce clutter, but used for scaling) */}
+          <YAxis 
+            yAxisId="right-btc"
+            orientation="right"
+            stroke="hsl(var(--chart-3))"
+            hide={true} // Hidden visual axis, but used for scaling the orange line
+            domain={['auto', 'auto']}
+          />
+
           <Tooltip 
             content={({ active, payload, label }) => {
               if (active && payload && payload.length) {
                 return (
                   <div className="bg-card/95 backdrop-blur-sm border border-border p-4 rounded-lg shadow-xl font-mono text-sm">
                     <p className="text-muted-foreground mb-2">{label}</p>
-                    {payload.map((entry: any) => (
-                      <div key={entry.name} className="flex items-center justify-between gap-8 mb-1">
-                        <span className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
-                          <span className="text-foreground font-medium">{entry.name}</span>
-                        </span>
-                        <span className="text-foreground">
-                          {Number(entry.value).toFixed(1)} 
-                          <span className="text-muted-foreground ml-1 text-xs">
-                             (Indexed)
+                    {payload.map((entry: any) => {
+                      let formattedValue = "";
+                      let unit = "";
+                      if (entry.dataKey === "rawUSD") {
+                        formattedValue = `$${Number(entry.value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                      } else if (entry.dataKey === "rawGold") {
+                        formattedValue = `${Number(entry.value).toFixed(4)}`;
+                        unit = " oz";
+                      } else if (entry.dataKey === "rawBTC") {
+                        formattedValue = `${Number(entry.value).toFixed(6)}`;
+                        unit = " BTC";
+                      }
+
+                      return (
+                        <div key={entry.name} className="flex items-center justify-between gap-8 mb-1">
+                          <span className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
+                            <span className="text-foreground font-medium">{entry.name}</span>
                           </span>
-                        </span>
-                      </div>
-                    ))}
+                          <span className="text-foreground">
+                            {formattedValue}
+                            <span className="text-muted-foreground ml-1 text-xs">{unit}</span>
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
               }
               return null;
             }}
           />
+          
           <Legend 
             wrapperStyle={{ paddingTop: '20px' }}
             formatter={(value) => <span className="text-foreground font-medium ml-2">{value}</span>}
           />
           
           <Line
+            yAxisId="left-usd"
             type="monotone"
-            dataKey="indexUSD"
-            name="USD"
+            dataKey="rawUSD"
+            name="USD Price"
             stroke="hsl(var(--primary))"
             strokeWidth={3}
             dot={{ r: 4, fill: "hsl(var(--primary))", strokeWidth: 0 }}
             activeDot={{ r: 6 }}
           />
           <Line
+            yAxisId="right-gold"
             type="monotone"
-            dataKey="indexGold"
-            name="Gold"
+            dataKey="rawGold"
+            name="Gold Cost"
             stroke="hsl(var(--chart-2))"
             strokeWidth={3}
             dot={{ r: 4, fill: "hsl(var(--chart-2))", strokeWidth: 0 }}
             activeDot={{ r: 6 }}
           />
           <Line
+            yAxisId="right-btc"
             type="monotone"
-            dataKey="indexBTC"
-            name="Bitcoin"
+            dataKey="rawBTC"
+            name="Bitcoin Cost"
             stroke="hsl(var(--chart-3))"
             strokeWidth={3}
             dot={{ r: 4, fill: "hsl(var(--chart-3))", strokeWidth: 0 }}
