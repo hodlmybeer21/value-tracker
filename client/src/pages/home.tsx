@@ -114,7 +114,7 @@ export default function Home() {
                 <span className="text-lg">💵</span> US Dollar
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                The chart shows the nominal price in USD. A rising blue line indicates inflation—it takes more dollars to buy the same {selectedItem.unit.toLowerCase()} over time.
+                The chart shows the nominal price in USD. A rising green line indicates inflation—it takes more dollars to buy the same {selectedItem.unit.toLowerCase()} over time.
               </p>
             </CardContent>
           </Card>
