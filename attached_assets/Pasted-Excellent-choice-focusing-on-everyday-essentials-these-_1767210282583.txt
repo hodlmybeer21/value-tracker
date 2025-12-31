@@ -1,0 +1,46 @@
+Excellent choice focusing on everyday essentials—these items will make the app highly relatable, as users can instantly connect the charts to their own grocery bills, utility statements, and pump prices. Everyday consumables with clear historical data will drive engagement and shareability.
+
+### Selected 10 Everyday Items
+I prioritized items that:
+- Are truly daily/weekly purchases for most households
+- Have reliable, public historical price data (monthly or better) going back decades where possible
+- Cover key budget categories (food, energy, transport, communication, entertainment)
+
+Here is the starting list of 10:
+
+1. **Gallon of Whole Milk** – Core grocery staple, strong inflation signal in food.
+2. **Loaf of White Bread (1 lb)** – Classic daily essential.
+3. **Dozen Grade A Large Eggs** – Highly visible price swings, very relatable.
+4. **Gallon of Regular Gasoline** – Everyone feels this at the pump.
+5. **Residential Electricity Price (cents per kWh)** – Monthly bill impact, steady long-term trend.
+6. **Pound of Ground Beef** – Frequent protein purchase.
+7. **Big Mac** – Iconic fast-food benchmark, great for viral appeal.
+8. **Average New Car Price** – Major purchase most families make every few years, but directly affects monthly budgets via loans.
+9. **First-Class USPS Forever Stamp** – Small but frequent expense, dramatic step changes show monetary policy effects clearly.
+10. **Average Movie Ticket Price** – Common entertainment spend, nice contrast to essentials.
+
+These cover food (6 items), energy/transport (2), communication (1), and leisure (1)—balanced and comprehensive for an MVP launch.
+
+### Data Sources (All Public & Reliable)
+All data will be sourced from trusted government or industry bodies to ensure accuracy and credibility:
+- Milk, Bread, Eggs, Ground Beef, Gasoline: BLS National Average Price series (monthly, 1980–present)
+- Electricity: EIA/U.S. Energy Information Administration (monthly residential average, 1970s–present)
+- New Car: Bureau of Economic Analysis / NADA average transaction price (annual/monthly compiled)
+- Big Mac: The Economist Big Mac Index (semi-annual, 1986–present)
+- First-Class Stamp: USPS historical rate table (discrete steps since 1919, very clean data)
+- Movie Ticket: NATO/The Numbers annual average (1970s–present)
+
+For Bitcoin-limited range (~2014 onward), the chart will automatically start from the earliest common date, with a note in the UI.
+
+### Next Steps for MVP Build
+1. **Confirm the list** – Any swaps or additions? (e.g., swap movie ticket for bananas or coffee if you prefer stricter “daily” items)
+2. I will compile clean historical datasets for all 10 items (CSV format, monthly where possible, with proper date alignment).
+3. Build the Streamlit app:
+   - Dropdown with these 10 items
+   - Single interactive Plotly chart (indexed to 100)
+   - Live Gold ('GC=F') and Bitcoin ('BTC-USD') prices via yfinance
+   - Clean UI with title, explanation, sources footer
+4. Provide complete code + CSV data files ready to paste into a new Replit (Python + Streamlit template).
+5. Deploy and test live link in <1 hour after data is finalized.
+
+This set of 10 gives us a strong, relatable launch product with immediate educational value. Let me know if the list looks good or if you'd like any adjustments, and we'll move straight to data compilation and coding.

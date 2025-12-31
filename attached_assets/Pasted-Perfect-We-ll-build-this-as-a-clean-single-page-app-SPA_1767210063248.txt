@@ -1,0 +1,235 @@
+Perfect. We’ll build this as a **clean, single-page app (SPA)** optimized for clarity, speed, and future expansion.
+
+Below is the **execution-ready plan** and then the **initial Replit build** (backend + frontend). You can paste this directly into Replit and run it.
+
+---
+
+# 1. Final Product Definition (Locked In)
+
+**Audience:** Everyday people trying to understand inflation and purchasing power
+**Format:** Single-page web app
+**Core Interaction:**
+Select an item → see one chart → instantly understand the story
+
+**Items (MVP):**
+
+* Bread (first, fully implemented)
+* Gasoline
+* Housing
+* Tuition
+* Grocery Basket (later)
+
+---
+
+# 2. Replit Project Setup
+
+### Create a new Replit
+
+* Template: **Node.js**
+* Name: whatever you want
+
+---
+
+# 3. File Structure
+
+```
+/
+├─ server.js
+├─ package.json
+├─ /public
+│   ├─ index.html
+│   ├─ style.css
+│   └─ app.js
+└─ /data
+    └─ bread.json
+```
+
+---
+
+# 4. Backend (server.js)
+
+This serves the app and exposes a simple API for item data.
+
+```js
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
+
+const app = express();
+const PORT = 3000;
+
+app.use(express.static("public"));
+
+app.get("/api/item/:name", (req, res) => {
+  const itemName = req.params.name;
+  const filePath = path.join(__dirname, "data", `${itemName}.json`);
+
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ error: "Item not found" });
+  }
+
+  const rawData = fs.readFileSync(filePath);
+  res.json(JSON.parse(rawData));
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+```
+
+---
+
+# 5. Sample Data (data/bread.json)
+
+⚠️ These are **placeholder demo values** for structure.
+We’ll replace them with real historical data next.
+
+```json
+[
+  { "year": 1990, "usd": 1.00, "gold": 383, "btc": null },
+  { "year": 2000, "usd": 1.20, "gold": 279, "btc": null },
+  { "year": 2010, "usd": 1.40, "gold": 1224, "btc": 0.08 },
+  { "year": 2020, "usd": 2.00, "gold": 1770, "btc": 7200 },
+  { "year": 2024, "usd": 2.80, "gold": 2300, "btc": 42000 }
+]
+```
+
+---
+
+# 6. Frontend HTML (public/index.html)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cost Over Time</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <h1>How the Cost of Everyday Life Has Changed</h1>
+  <p>Select an item to see how its cost has changed over time.</p>
+
+  <select id="itemSelect">
+    <option value="bread">Bread</option>
+  </select>
+
+  <canvas id="costChart"></canvas>
+
+  <p id="explanation"></p>
+
+  <script src="app.js"></script>
+</body>
+</html>
+```
+
+---
+
+# 7. Styling (public/style.css)
+
+```css
+body {
+  font-family: Arial, sans-serif;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+canvas {
+  margin-top: 30px;
+}
+
+select {
+  padding: 8px;
+  font-size: 16px;
+}
+```
+
+---
+
+# 8. Frontend Logic (public/app.js)
+
+```js
+let chart;
+
+async function loadItem(item) {
+  const res = await fetch(`/api/item/${item}`);
+  const data = await res.json();
+
+  const base = data[0];
+
+  const labels = data.map(d => d.year);
+
+  const usd = data.map(d => (d.usd / base.usd) * 100);
+  const gold = data.map(d => ((d.usd / d.gold) / (base.usd / base.gold)) * 100);
+  const btc = data.map(d =>
+    d.btc ? ((d.usd / d.btc) / (base.usd / base.btc)) * 100 : null
+  );
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(document.getElementById("costChart"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        { label: "US Dollar", data: usd, borderColor: "blue" },
+        { label: "Gold", data: gold, borderColor: "gold" },
+        { label: "Bitcoin", data: btc, borderColor: "orange" }
+      ]
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: "Relative Cost (Base Year = 100)"
+        }
+      }
+    }
+  });
+
+  document.getElementById("explanation").innerText =
+    "This chart shows how the cost of bread has changed when measured in dollars, gold, and bitcoin.";
+}
+
+document.getElementById("itemSelect").addEventListener("change", e => {
+  loadItem(e.target.value);
+});
+
+loadItem("bread");
+```
+
+---
+
+# 9. What You Have Right Now
+
+✅ Single-page app
+✅ Item selector
+✅ One unified chart
+✅ Normalized comparison
+✅ Clean UX
+✅ Replit-ready
+
+---
+
+# 10. Next Professional Step (Important)
+
+The **next step is replacing placeholder data with real historical data**.
+
+I recommend we do this **item by item**, starting with **Bread**, using:
+
+* FRED CPI data
+* LBMA gold prices
+* CoinGecko BTC prices
+
+### Next Question (Execution-Critical):
+
+Do you want:
+
+1. **Annual data only** (cleaner, simpler), or
+2. **Monthly data** (more precise but heavier)
+
+If you say nothing, I’ll default to **annual** and proceed.
