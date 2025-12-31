@@ -49,7 +49,7 @@ export default function Home() {
               <SelectTrigger className="h-12 bg-card border-border text-lg shadow-sm">
                 <SelectValue placeholder="Select an item" />
               </SelectTrigger>
-              <SelectContent className="bg-card border-border shadow-xl">
+              <SelectContent className="bg-popover border-border shadow-xl z-[9999] opacity-100">
                 {ITEMS.map((item) => (
                   <SelectItem key={item.id} value={item.id} className="text-base py-3 cursor-pointer">
                     <span className="mr-2">{item.emoji}</span> {item.name}

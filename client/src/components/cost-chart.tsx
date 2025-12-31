@@ -86,7 +86,7 @@ export function CostChart({ item }: CostChartProps) {
               position: 'insideRight', 
               style: { fill: 'hsl(45, 93%, 47%)', textAnchor: 'middle' },
               dy: 0,
-              dx: 10
+              dx: 40 // Increased offset to prevent overlap
             }}
           />
 
