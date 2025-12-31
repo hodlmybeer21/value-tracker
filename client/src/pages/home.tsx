@@ -46,10 +46,10 @@ export default function Home() {
               Select Item to Compare
             </label>
             <Select value={selectedItemId} onValueChange={setSelectedItemId}>
-              <SelectTrigger className="h-12 bg-card/50 backdrop-blur border-border text-lg">
+              <SelectTrigger className="h-12 bg-card border-border text-lg shadow-sm">
                 <SelectValue placeholder="Select an item" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-card border-border shadow-xl">
                 {ITEMS.map((item) => (
                   <SelectItem key={item.id} value={item.id} className="text-base py-3 cursor-pointer">
                     <span className="mr-2">{item.emoji}</span> {item.name}

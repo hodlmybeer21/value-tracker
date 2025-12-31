@@ -85,7 +85,8 @@ export function CostChart({ item }: CostChartProps) {
               angle: 90, 
               position: 'insideRight', 
               style: { fill: 'hsl(45, 93%, 47%)', textAnchor: 'middle' },
-              dy: -20
+              dy: 0,
+              dx: 10
             }}
           />
 
