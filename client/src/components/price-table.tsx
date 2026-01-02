@@ -81,7 +81,7 @@ export function PriceTable({ item }: PriceTableProps) {
         <table className="w-full text-sm text-center border-collapse min-w-[800px]">
           <thead>
             <tr className="border-b border-border/50">
-              <th className="p-3 font-mono text-xs uppercase tracking-widest text-muted-foreground bg-muted/20 sticky left-0 z-10">Currency</th>
+              <th className="p-3 font-mono text-xs uppercase tracking-widest text-muted-foreground bg-background sticky left-0 z-20 border-r border-border">Currency</th>
               {tableData.map(d => (
                 <th key={d.year} className="p-3 font-mono font-bold border-l border-border/20 min-w-[80px]">
                   {d.year}
@@ -92,7 +92,7 @@ export function PriceTable({ item }: PriceTableProps) {
           <tbody>
             {/* USD ROW */}
             <tr className="border-b border-border/50 group hover:bg-muted/5">
-              <td className="p-3 font-bold text-left bg-muted/20 sticky left-0 z-10 border-r border-border">USD ($)</td>
+              <td className="p-3 font-bold text-left bg-background sticky left-0 z-20 border-r border-border shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)]">USD ($)</td>
               {tableData.map((d, i) => (
                 <td key={d.year} className={cn("p-2 border-l border-border/20 transition-colors", getColorClass(d.usd, usdValues))}>
                   {formatValue(d.usd, 'usd')}
@@ -102,7 +102,7 @@ export function PriceTable({ item }: PriceTableProps) {
 
             {/* GOLD ROW */}
             <tr className="border-b border-border/50 group hover:bg-muted/5">
-              <td className="p-3 font-bold text-left bg-muted/20 sticky left-0 z-10 border-r border-border text-chart-2">Gold (oz)</td>
+              <td className="p-3 font-bold text-left bg-background sticky left-0 z-20 border-r border-border shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)] text-chart-2">Gold (oz)</td>
               {tableData.map((d, i) => (
                 <td key={d.year} className={cn("p-2 border-l border-border/20 transition-colors", getColorClass(d.gold, goldValues))}>
                   {formatValue(d.gold, 'gold')}
@@ -112,7 +112,7 @@ export function PriceTable({ item }: PriceTableProps) {
 
             {/* BTC ROW */}
             <tr className="group hover:bg-muted/5">
-              <td className="p-3 font-bold text-left bg-muted/20 sticky left-0 z-10 border-r border-border text-chart-3">Bitcoin (BTC)</td>
+              <td className="p-3 font-bold text-left bg-background sticky left-0 z-20 border-r border-border shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)] text-chart-3">Bitcoin (BTC)</td>
               {tableData.map((d, i) => (
                 <td key={d.year} className={cn("p-2 border-l border-border/20 transition-colors", getColorClass(d.btc, btcValues))}>
                   {formatValue(d.btc, 'btc')}
