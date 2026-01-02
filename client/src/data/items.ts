@@ -287,5 +287,145 @@ export const ITEMS: ItemData[] = [
       2012: 23.50, 2013: 24.00, 2014: 24.50, 2015: 25.00, 2016: 25.50, 2017: 26.00,
       2018: 27.00, 2019: 28.00, 2020: 29.50, 2021: 31.00, 2022: 32.50, 2023: 34.00, 2024: 35.00
     })
+  },
+  {
+    id: "movie",
+    name: "Movie Ticket",
+    description: "Average price of a movie ticket in the United States.",
+    unit: "Ticket",
+    emoji: "🎟️",
+    data: createItemData({
+      1970: 1.55, 1975: 2.03, 1980: 2.69, 1985: 3.55, 1990: 4.22, 1995: 4.35,
+      2000: 5.39, 2005: 6.41, 2008: 7.18, 2009: 7.50, 2010: 7.89, 2011: 7.93,
+      2012: 7.96, 2013: 8.13, 2014: 8.17, 2015: 8.43, 2016: 8.65, 2017: 8.97,
+      2018: 9.11, 2019: 9.16, 2020: 9.37, 2021: 10.17, 2022: 10.53, 2023: 11.90, 2024: 12.50
+    })
+  },
+  {
+    id: "stamp",
+    name: "Postage Stamp",
+    description: "Cost of a First-Class Mail letter stamp.",
+    unit: "Stamp",
+    emoji: "📮",
+    data: createItemData({
+      1970: 0.06, 1975: 0.10, 1980: 0.15, 1985: 0.22, 1990: 0.25, 1995: 0.32,
+      2000: 0.33, 2005: 0.37, 2008: 0.42, 2009: 0.44, 2010: 0.44, 2011: 0.44,
+      2012: 0.45, 2013: 0.46, 2014: 0.49, 2015: 0.49, 2016: 0.47, 2017: 0.49,
+      2018: 0.50, 2019: 0.55, 2020: 0.55, 2021: 0.58, 2022: 0.60, 2023: 0.66, 2024: 0.73
+    })
+  },
+  {
+    id: "disney",
+    name: "Disney World Ticket",
+    description: "Price of a single-day admission ticket to Magic Kingdom.",
+    unit: "Ticket",
+    emoji: "🎢",
+    data: createItemData({
+      1970: 3.50, 1975: 6.00, 1980: 9.50, 1985: 21.50, 1990: 31.00, 1995: 37.00,
+      2000: 46.00, 2005: 59.75, 2008: 75.00, 2009: 79.00, 2010: 82.00, 2011: 85.00,
+      2012: 89.00, 2013: 95.00, 2014: 99.00, 2015: 105.00, 2016: 110.00, 2017: 115.00,
+      2018: 122.00, 2019: 125.00, 2020: 135.00, 2021: 145.00, 2022: 159.00, 2023: 164.00, 2024: 184.00
+    })
+  },
+  {
+    id: "beer",
+    name: "Beer (6-pack)",
+    description: "Average price of a 6-pack of domestic beer.",
+    unit: "6-pack",
+    emoji: "🍺",
+    data: createItemData({
+      1970: 1.50, 1975: 2.25, 1980: 3.15, 1985: 3.95, 1990: 4.75, 1995: 5.50,
+      2000: 6.25, 2005: 7.50, 2008: 8.50, 2009: 8.75, 2010: 8.99, 2011: 9.25,
+      2012: 9.50, 2013: 9.75, 2014: 9.99, 2015: 10.25, 2016: 10.50, 2017: 10.75,
+      2018: 10.99, 2019: 11.25, 2020: 11.50, 2021: 11.99, 2022: 12.50, 2023: 13.50, 2024: 14.25
+    })
+  },
+  {
+    id: "burger",
+    name: "Big Mac",
+    description: "Average price of a Big Mac burger in the US.",
+    unit: "Burger",
+    emoji: "🍔",
+    data: createItemData({
+      1970: 0.55, 1975: 0.75, 1980: 1.30, 1985: 1.60, 1990: 2.20, 1995: 2.30,
+      2000: 2.50, 2005: 3.15, 2008: 3.57, 2009: 3.57, 2010: 3.73, 2011: 4.07,
+      2012: 4.33, 2013: 4.56, 2014: 4.62, 2015: 4.79, 2016: 4.93, 2017: 5.06,
+      2018: 5.28, 2019: 5.58, 2020: 5.67, 2021: 5.93, 2022: 6.30, 2023: 6.58, 2024: 6.95
+    })
+  },
+  {
+    id: "superbowl",
+    name: "Super Bowl Ticket",
+    description: "Face value price of a Super Bowl ticket (non-resale).",
+    unit: "Ticket",
+    emoji: "🏈",
+    data: createItemData({
+      1970: 15, 1975: 20, 1980: 30, 1985: 60, 1990: 125, 1995: 200,
+      2000: 325, 2005: 600, 2008: 700, 2009: 800, 2010: 900, 2011: 900,
+      2012: 1200, 2013: 1200, 2014: 1500, 2015: 2000, 2016: 2500, 2017: 2500,
+      2018: 2500, 2019: 2500, 2020: 2500, 2021: 3000, 2022: 3000, 2023: 3500, 2024: 4000
+    })
+  },
+  {
+    id: "jeans",
+    name: "Levi's 501 Jeans",
+    description: "Average price of a pair of Levi's 501 jeans.",
+    unit: "Pair",
+    emoji: "👖",
+    data: createItemData({
+      1970: 7.00, 1975: 13.50, 1980: 17.00, 1985: 24.00, 1990: 28.00, 1995: 35.00,
+      2000: 45.00, 2005: 46.00, 2008: 48.00, 2009: 48.00, 2010: 48.00, 2011: 54.00,
+      2012: 58.00, 2013: 58.00, 2014: 58.00, 2015: 59.50, 2016: 59.50, 2017: 59.50,
+      2018: 59.50, 2019: 69.50, 2020: 69.50, 2021: 69.50, 2022: 79.50, 2023: 79.50, 2024: 89.50
+    })
+  },
+  {
+    id: "coke",
+    name: "Coca-Cola (Can)",
+    description: "Price of a single can of Coke from a vending machine.",
+    unit: "Can",
+    emoji: "🥤",
+    data: createItemData({
+      1970: 0.10, 1975: 0.20, 1980: 0.35, 1985: 0.50, 1990: 0.65, 1995: 0.75,
+      2000: 1.00, 2005: 1.00, 2008: 1.25, 2009: 1.25, 2010: 1.25, 2011: 1.35,
+      2012: 1.50, 2013: 1.50, 2014: 1.50, 2015: 1.50, 2016: 1.50, 2017: 1.50,
+      2018: 1.75, 2019: 1.75, 2020: 2.00, 2021: 2.00, 2022: 2.25, 2023: 2.50, 2024: 2.75
+    })
+  },
+  {
+    id: "pizza",
+    name: "Slice of Pizza (NYC)",
+    description: "Average price of a plain slice of pizza in NYC.",
+    unit: "Slice",
+    emoji: "🍕",
+    data: createItemData({
+      1970: 0.25, 1975: 0.45, 1980: 0.75, 1985: 1.00, 1990: 1.25, 1995: 1.50,
+      2000: 1.75, 2005: 2.00, 2008: 2.25, 2009: 2.25, 2010: 2.50, 2011: 2.50,
+      2012: 2.50, 2013: 2.75, 2014: 2.75, 2015: 2.75, 2016: 2.75, 2017: 3.00,
+      2018: 3.00, 2019: 3.00, 2020: 3.00, 2021: 3.25, 2022: 3.50, 2023: 3.75, 2024: 4.00
+    })
   }
 ];
+
+// Helper to expand with variations if needed for scale testing
+const createVariation = (base: ItemData, index: number): ItemData => {
+  const variationFactor = 1 + (index * 0.05); // 5% increase per variation
+  return {
+    id: `${base.id}_var_${index}`,
+    name: `${base.name} (Type ${index + 1})`,
+    description: `Variation ${index + 1} of ${base.name}`,
+    unit: base.unit,
+    emoji: base.emoji,
+    data: base.data.map(d => ({
+      ...d,
+      itemPriceUSD: Number((d.itemPriceUSD * variationFactor).toFixed(2))
+    }))
+  };
+};
+
+// Generate 50 extra mock items based on existing ones to flesh out the list
+for (let i = 0; i < 50; i++) {
+  const baseItem = ITEMS[i % 10]; // Cycle through first 10 items
+  ITEMS.push(createVariation(baseItem, i));
+}
+

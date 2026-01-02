@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ITEMS } from "@/data/items";
+import { ITEMS, ItemData } from "@/data/items";
+import { AddItemDialog } from "@/components/add-item-dialog";
 import { CostChart } from "@/components/cost-chart";
 import { BitcoinChart } from "@/components/bitcoin-chart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -7,10 +8,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import background from "@assets/generated_images/subtle_dark_financial_data_visualization_abstract_background.png";
 
 export default function Home() {
+  const [items, setItems] = useState<ItemData[]>(ITEMS);
   // Default to Bread or the first item
   const [selectedItemId, setSelectedItemId] = useState<string>(ITEMS[0].id);
 
-  const selectedItem = ITEMS.find((i) => i.id === selectedItemId) || ITEMS[0];
+  const selectedItem = items.find((i) => i.id === selectedItemId) || items[0];
+
+  const handleAddItem = (newItem: ItemData) => {
+    setItems((prev) => [...prev, newItem]);
+    setSelectedItemId(newItem.id);
+  };
 
   return (
     <div className="min-h-screen w-full bg-background text-foreground relative overflow-hidden font-sans selection:bg-primary/20">
@@ -41,7 +48,7 @@ export default function Home() {
         </header>
 
         {/* Controls */}
-        <div className="mb-8 flex justify-center">
+        <div className="mb-8 flex flex-col md:flex-row justify-center items-end gap-4">
           <div className="w-full max-w-md">
             <label className="text-xs font-mono text-muted-foreground mb-2 block uppercase tracking-widest">
               Select Item to Compare
@@ -51,7 +58,7 @@ export default function Home() {
                 <SelectValue placeholder="Select an item" />
               </SelectTrigger>
               <SelectContent className="bg-white border-border shadow-xl z-[9999] opacity-100 max-h-[300px]">
-                {ITEMS.map((item) => (
+                {items.map((item) => (
                   <SelectItem key={item.id} value={item.id} className="text-base py-3 cursor-pointer text-slate-900 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:font-semibold data-[state=checked]:text-slate-900">
                     <span className="mr-2">{item.emoji}</span> {item.name}
                   </SelectItem>
@@ -59,6 +66,7 @@ export default function Home() {
               </SelectContent>
             </Select>
           </div>
+          <AddItemDialog onAddItem={handleAddItem} />
         </div>
 
         {/* Chart Card */}
