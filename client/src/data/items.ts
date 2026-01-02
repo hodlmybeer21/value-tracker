@@ -407,25 +407,4 @@ export const ITEMS: ItemData[] = [
   }
 ];
 
-// Helper to expand with variations if needed for scale testing
-const createVariation = (base: ItemData, index: number): ItemData => {
-  const variationFactor = 1 + (index * 0.05); // 5% increase per variation
-  return {
-    id: `${base.id}_var_${index}`,
-    name: `${base.name} (Type ${index + 1})`,
-    description: `Variation ${index + 1} of ${base.name}`,
-    unit: base.unit,
-    emoji: base.emoji,
-    data: base.data.map(d => ({
-      ...d,
-      itemPriceUSD: Number((d.itemPriceUSD * variationFactor).toFixed(2))
-    }))
-  };
-};
-
-// Generate 50 extra mock items based on existing ones to flesh out the list
-for (let i = 0; i < 50; i++) {
-  const baseItem = ITEMS[i % 10]; // Cycle through first 10 items
-  ITEMS.push(createVariation(baseItem, i));
-}
 
