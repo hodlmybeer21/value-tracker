@@ -141,6 +141,19 @@ export const ITEMS: ItemData[] = [
     })
   },
   {
+    id: "monopoly",
+    name: "Monopoly Game",
+    description: "Standard edition Monopoly board game price.",
+    unit: "Game",
+    emoji: "🎲",
+    data: createItemData({
+      1970: 4.00, 1975: 5.00, 1980: 7.00, 1985: 9.00, 1990: 12.00, 1995: 15.00,
+      2000: 18.00, 2005: 18.00, 2008: 18.00, 2009: 18.00, 2010: 18.00, 2011: 18.00,
+      2012: 18.00, 2013: 18.00, 2014: 18.00, 2015: 20.00, 2016: 20.00, 2017: 20.00,
+      2018: 20.00, 2019: 20.00, 2020: 20.00, 2021: 20.00, 2022: 21.00, 2023: 22.00, 2024: 22.00
+    })
+  },
+  {
     id: "home",
     name: "Median US Home",
     description: "Median sales price of houses sold in the United States.",
