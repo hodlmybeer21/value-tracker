@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ITEMS, ItemData } from "@/data/items";
 import { CostChart } from "@/components/cost-chart";
 import { BitcoinChart } from "@/components/bitcoin-chart";
+import { PriceTable } from "@/components/price-table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import background from "@assets/generated_images/subtle_dark_financial_data_visualization_abstract_background.png";
@@ -90,6 +91,9 @@ export default function Home() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Data Table */}
+        <PriceTable item={selectedItem} />
 
         {/* Bitcoin Zoom Chart */}
         <Card className="border-border bg-card/40 backdrop-blur-md shadow-2xl mb-12 overflow-hidden border-t-4 border-t-[hsl(24,95%,53%)]">
