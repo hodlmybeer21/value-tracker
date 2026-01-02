@@ -48,10 +48,15 @@ function createItemData(usdPrices: Record<number, number>): PriceDataPoint[] {
   return Object.keys(BASE_FINANCIALS).map(yStr => {
     const year = parseInt(yStr);
     const financials = BASE_FINANCIALS[year];
-    // Simple interpolation or fallback if exact year missing in usdPrices
-    // For this mock, we assume usdPrices has keys for all these years or we allow gaps
-    // But better to just define the inputs to match.
-    const price = usdPrices[year] || 0; 
+    // Use the exact year price if available, otherwise find the closest previous year (interpolation/fill forward)
+    let price = usdPrices[year];
+    if (price === undefined) {
+       // Simple fill forward for gaps in the input map if specific year missing
+       const availableYears = Object.keys(usdPrices).map(Number).sort((a,b) => a-b);
+       const prevYear = availableYears.reverse().find(y => y <= year);
+       price = prevYear ? usdPrices[prevYear] : 0;
+    }
+    
     return {
       year,
       itemPriceUSD: price,
@@ -102,6 +107,19 @@ export const ITEMS: ItemData[] = [
     })
   },
   {
+    id: "coffee",
+    name: "Cup of Coffee",
+    description: "Average price of a standard cup of brewed coffee.",
+    unit: "Cup",
+    emoji: "☕",
+    data: createItemData({
+      1970: 0.25, 1975: 0.35, 1980: 0.45, 1985: 0.55, 1990: 0.75, 1995: 0.90,
+      2000: 1.00, 2005: 1.75, 2008: 1.95, 2009: 2.00, 2010: 2.10, 2011: 2.25,
+      2012: 2.30, 2013: 2.35, 2014: 2.38, 2015: 2.45, 2016: 2.50, 2017: 2.60,
+      2018: 2.70, 2019: 2.70, 2020: 2.90, 2021: 2.95, 2022: 3.00, 2023: 3.05, 2024: 3.08
+    })
+  },
+  {
     id: "grocery",
     name: "Grocery Basket",
     description: "Estimated cost of a standard weekly grocery basket for a family of four.",
@@ -128,6 +146,19 @@ export const ITEMS: ItemData[] = [
     })
   },
   {
+    id: "propane",
+    name: "Propane (1 Gallon)",
+    description: "Average residential price per gallon of propane (heating season).",
+    unit: "Gallon",
+    emoji: "🔥",
+    data: createItemData({
+      1970: 0.20, 1975: 0.35, 1980: 0.65, 1985: 0.80, 1990: 0.95, 1995: 0.98,
+      2000: 1.25, 2005: 1.80, 2008: 2.40, 2009: 2.30, 2010: 2.50, 2011: 2.80,
+      2012: 2.70, 2013: 2.65, 2014: 3.20, 2015: 2.40, 2016: 2.10, 2017: 2.30,
+      2018: 2.45, 2019: 2.50, 2020: 2.35, 2021: 2.60, 2022: 2.85, 2023: 2.75, 2024: 2.80
+    })
+  },
+  {
     id: "electricity",
     name: "Electricity (kWh)",
     description: "Average price per kilowatt-hour of residential electricity.",
@@ -141,6 +172,19 @@ export const ITEMS: ItemData[] = [
     })
   },
   {
+    id: "washer",
+    name: "Washing Machine",
+    description: "Average cost of a standard washing machine.",
+    unit: "Unit",
+    emoji: "🧺",
+    data: createItemData({
+      1970: 350, 1975: 400, 1980: 500, 1985: 550, 1990: 500, 1995: 450,
+      2000: 400, 2005: 400, 2008: 350, 2009: 350, 2010: 350, 2011: 320,
+      2012: 300, 2013: 350, 2014: 400, 2015: 450, 2016: 500, 2017: 550,
+      2018: 600, 2019: 650, 2020: 700, 2021: 850, 2022: 800, 2023: 780, 2024: 775
+    })
+  },
+  {
     id: "monopoly",
     name: "Monopoly Game",
     description: "Standard edition Monopoly board game price.",
@@ -151,6 +195,19 @@ export const ITEMS: ItemData[] = [
       2000: 18.00, 2005: 18.00, 2008: 18.00, 2009: 18.00, 2010: 18.00, 2011: 18.00,
       2012: 18.00, 2013: 18.00, 2014: 18.00, 2015: 20.00, 2016: 20.00, 2017: 20.00,
       2018: 20.00, 2019: 20.00, 2020: 20.00, 2021: 20.00, 2022: 21.00, 2023: 22.00, 2024: 22.00
+    })
+  },
+  {
+    id: "clothes",
+    name: "Kids' Clothing Set",
+    description: "Average cost of a basic outfit (shirt + pants) for a child.",
+    unit: "Outfit",
+    emoji: "👕",
+    data: createItemData({
+      1970: 15.00, 1975: 18.00, 1980: 22.00, 1985: 25.00, 1990: 30.00, 1995: 32.00,
+      2000: 30.00, 2005: 28.00, 2008: 28.00, 2009: 28.00, 2010: 28.00, 2011: 29.00,
+      2012: 29.00, 2013: 29.00, 2014: 30.00, 2015: 30.00, 2016: 30.00, 2017: 30.00,
+      2018: 30.00, 2019: 30.00, 2020: 32.00, 2021: 35.00, 2022: 38.00, 2023: 40.00, 2024: 42.00
     })
   },
   {
@@ -177,6 +234,19 @@ export const ITEMS: ItemData[] = [
       2000: 602, 2005: 750, 2008: 800, 2009: 820, 2010: 844, 2011: 870,
       2012: 900, 2013: 930, 2014: 960, 2015: 1000, 2016: 1050, 2017: 1100,
       2018: 1150, 2019: 1200, 2020: 1250, 2021: 1400, 2022: 1700, 2023: 2000, 2024: 2150
+    })
+  },
+  {
+    id: "childcare",
+    name: "Child Care (Annual)",
+    description: "Average annual cost of center-based child care for an infant/toddler.",
+    unit: "Year",
+    emoji: "🧸",
+    data: createItemData({
+      1970: 1500, 1975: 2200, 1980: 3000, 1985: 4500, 1990: 5500, 1995: 7000,
+      2000: 8500, 2005: 10500, 2008: 12000, 2009: 12200, 2010: 12500, 2011: 12800,
+      2012: 13000, 2013: 13500, 2014: 13800, 2015: 14000, 2016: 14500, 2017: 15000,
+      2018: 15500, 2019: 16000, 2020: 16500, 2021: 17500, 2022: 18500, 2023: 19500, 2024: 20500
     })
   },
   {
