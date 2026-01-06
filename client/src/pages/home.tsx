@@ -41,8 +41,8 @@ export default function Home() {
           >
             <a href="bitcoin:bc1qakn7jw6wjuhr3t5mpgjaw5ppnsp7gwt4534php">
               <Bitcoin className="w-4 h-4 text-orange-500" />
-              <span className="hidden sm:inline">Donate Bitcoin</span>
-              <span className="sm:hidden">Donate</span>
+              <span className="hidden sm:inline">Support Value Tracker</span>
+              <span className="sm:hidden">Support</span>
             </a>
           </Button>
         </div>
