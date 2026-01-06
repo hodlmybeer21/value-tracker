@@ -113,13 +113,13 @@ export default function AdvancedInsights() {
                 <div className="space-y-2">
                   <Label>Select Item to Compare</Label>
                   <Select value={selectedItemId} onValueChange={setSelectedItemId}>
-                    <SelectTrigger>
-                      <SelectValue />
+                    <SelectTrigger className="h-12 bg-card border-border text-lg shadow-sm">
+                      <SelectValue placeholder="Select an item" />
                     </SelectTrigger>
-                    <SelectContent>
-                      {ITEMS.map(item => (
-                        <SelectItem key={item.id} value={item.id}>
-                          {item.emoji} {item.name}
+                    <SelectContent className="bg-white border-border shadow-xl z-[9999] opacity-100 max-h-[300px]">
+                      {ITEMS.map((item) => (
+                        <SelectItem key={item.id} value={item.id} className="text-base py-3 cursor-pointer text-slate-900 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:font-semibold data-[state=checked]:text-slate-900">
+                          <span className="mr-2">{item.emoji}</span> {item.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
