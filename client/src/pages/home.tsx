@@ -62,7 +62,7 @@ export default function Home() {
         </header>
 
         {/* Controls */}
-        <div className="mb-8 flex flex-col items-center gap-6">
+        <div className="mb-8 flex justify-center">
           <div className="w-full max-w-md">
             <label className="text-xs font-mono text-muted-foreground mb-2 block uppercase tracking-widest text-center">
               Select Item to Compare
@@ -80,13 +80,6 @@ export default function Home() {
               </SelectContent>
             </Select>
           </div>
-
-          <Link href="/advanced-insights">
-            <Button variant="ghost" className="group text-muted-foreground hover:text-primary transition-colors">
-              Advanced Insights 
-              <span className="ml-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">→</span>
-            </Button>
-          </Link>
         </div>
 
         {/* Chart Card */}
@@ -171,6 +164,15 @@ export default function Home() {
               </p>
             </CardContent>
           </Card>
+        </div>
+        
+        <div className="flex justify-center mb-20">
+           <Link href="/advanced-insights">
+            <Button variant="ghost" className="group text-muted-foreground hover:text-primary transition-colors">
+              Advanced Insights 
+              <span className="ml-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">→</span>
+            </Button>
+          </Link>
         </div>
         
         {/* Footer */}
