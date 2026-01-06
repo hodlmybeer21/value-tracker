@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import { ITEMS, ItemData } from "@/data/items";
 import { CostChart } from "@/components/cost-chart";
 import { BitcoinChart } from "@/components/bitcoin-chart";
@@ -61,9 +62,9 @@ export default function Home() {
         </header>
 
         {/* Controls */}
-        <div className="mb-8 flex justify-center">
+        <div className="mb-8 flex flex-col items-center gap-6">
           <div className="w-full max-w-md">
-            <label className="text-xs font-mono text-muted-foreground mb-2 block uppercase tracking-widest">
+            <label className="text-xs font-mono text-muted-foreground mb-2 block uppercase tracking-widest text-center">
               Select Item to Compare
             </label>
             <Select value={selectedItemId} onValueChange={setSelectedItemId}>
@@ -79,6 +80,13 @@ export default function Home() {
               </SelectContent>
             </Select>
           </div>
+
+          <Link href="/advanced-insights">
+            <Button variant="ghost" className="group text-muted-foreground hover:text-primary transition-colors">
+              Advanced Insights 
+              <span className="ml-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">→</span>
+            </Button>
+          </Link>
         </div>
 
         {/* Chart Card */}
