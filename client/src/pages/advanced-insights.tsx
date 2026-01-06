@@ -140,7 +140,7 @@ export default function AdvancedInsights() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Age when you had kids</Label>
+                    <Label>Age you had kids</Label>
                     <Input 
                       type="number" 
                       min={18} 
@@ -153,11 +153,11 @@ export default function AdvancedInsights() {
 
                 <div className="rounded-lg bg-primary/5 p-4 text-sm text-muted-foreground">
                   <p className="font-mono text-xs uppercase mb-1 text-primary">Comparison Era</p>
-                  <div className="flex justify-between items-center mb-1">
+                  <div className="flex items-center gap-2 mb-1">
                     <span>Parent's Era:</span>
                     <span className="font-bold text-foreground">{parentChildbirthYear}</span>
                   </div>
-                   <div className="flex justify-between items-center">
+                   <div className="flex items-center gap-2">
                     <span>Current Era:</span>
                     <span className="font-bold text-foreground">{currentYear}</span>
                   </div>
