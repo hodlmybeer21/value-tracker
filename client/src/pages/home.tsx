@@ -48,8 +48,8 @@ export default function Home() {
         </div>
 
         {/* Header */}
-        <header className="mb-12 text-center space-y-4">
-          <div className="inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-mono tracking-wider mb-2">
+        <header className="mt-16 mb-12 text-center space-y-4 md:mt-0">
+          <div className="inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-mono tracking-wider mb-2">
             PURCHASING POWER PARITY
           </div>
           <h1 className="text-4xl md:text-6xl font-display font-bold tracking-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
