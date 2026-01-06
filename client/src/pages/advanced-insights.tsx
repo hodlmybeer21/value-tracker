@@ -12,6 +12,11 @@ import { CostChart } from "@/components/cost-chart";
 import background from "@assets/generated_images/subtle_dark_financial_data_visualization_abstract_background.png";
 
 export default function AdvancedInsights() {
+  // Scroll to top when component mounts
+  useState(() => {
+    window.scrollTo(0, 0);
+  });
+
   const [parentBirthYear, setParentBirthYear] = useState<string>("1965");
   const [parentAgeAtBirth, setParentAgeAtBirth] = useState<string>("30");
   const [selectedItemId, setSelectedItemId] = useState<string>("home");
