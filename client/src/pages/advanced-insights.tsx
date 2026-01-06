@@ -30,7 +30,7 @@ export default function AdvancedInsights() {
   const parentEraStart = parentYear + 20; // Assume "Adult" life starts at 20? Or specifically when they had kids?
   // Text says "Parent's Era (e.g., cost when you had kids)"
   const parentChildbirthYear = parentYear + ageAtBirth;
-  const currentYear = 2024;
+  const currentYear = 2025;
   
   // Find data points
   const parentEraData = selectedItem.data.find(d => d.year === parentChildbirthYear) || 

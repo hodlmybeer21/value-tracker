@@ -6,7 +6,7 @@ interface PriceTableProps {
   item: ItemData;
 }
 
-const YEARS_TO_SHOW = [1970, 1980, 1990, 2000, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024];
+const YEARS_TO_SHOW = [1970, 1980, 1990, 2000, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024, 2025];
 
 export function PriceTable({ item }: PriceTableProps) {
   // Filter data for selected years
