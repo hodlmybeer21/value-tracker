@@ -7,6 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card";
 import background from "@assets/generated_images/subtle_dark_financial_data_visualization_abstract_background.png";
 
+import { Bitcoin } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
 export default function Home() {
   const [items] = useState<ItemData[]>(ITEMS);
   // Default to Bread or the first item
@@ -29,6 +32,21 @@ export default function Home() {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-12 max-w-5xl">
         
+        {/* Donation Button */}
+        <div className="absolute top-4 right-4 md:top-8 md:right-8">
+          <Button 
+            variant="outline" 
+            className="gap-2 bg-card/80 backdrop-blur-sm border-orange-500/30 hover:bg-orange-500/10 hover:border-orange-500 hover:text-orange-500 transition-all"
+            asChild
+          >
+            <a href="bitcoin:bc1qakn7jw6wjuhr3t5mpgjaw5ppnsp7gwt4534php">
+              <Bitcoin className="w-4 h-4 text-orange-500" />
+              <span className="hidden sm:inline">Donate Bitcoin</span>
+              <span className="sm:hidden">Donate</span>
+            </a>
+          </Button>
+        </div>
+
         {/* Header */}
         <header className="mb-12 text-center space-y-4">
           <div className="inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-mono tracking-wider mb-2">
