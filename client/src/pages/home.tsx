@@ -6,17 +6,31 @@ import { BitcoinChart } from "@/components/bitcoin-chart";
 import { PriceTable } from "@/components/price-table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import background from "@assets/generated_images/subtle_dark_financial_data_visualization_abstract_background.png";
+import { QRCodeSVG } from "qrcode.react";
 
-import { Bitcoin } from "lucide-react";
+import { Bitcoin, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+const BITCOIN_ADDRESS = "bc1qakn7jw6wjuhr3t5mpgjaw5ppnsp7gwt4534php";
 
 export default function Home() {
   const [items] = useState<ItemData[]>(ITEMS);
-  // Default to Bread or the first item
   const [selectedItemId, setSelectedItemId] = useState<string>(ITEMS[0].id);
+  const [copied, setCopied] = useState(false);
 
   const selectedItem = items.find((i) => i.id === selectedItemId) || items[0];
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(BITCOIN_ADDRESS);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
 
   return (
     <div className="min-h-screen w-full bg-background text-foreground relative overflow-hidden font-sans selection:bg-primary/20">
@@ -35,17 +49,65 @@ export default function Home() {
         
         {/* Donation Button */}
         <div className="absolute top-4 right-4 md:top-8 md:right-8">
-          <Button 
-            variant="outline" 
-            className="gap-2 bg-card/80 backdrop-blur-sm border-orange-500/30 hover:bg-orange-500/10 hover:border-orange-500 hover:text-orange-500 transition-all"
-            asChild
-          >
-            <a href="bitcoin:bc1qakn7jw6wjuhr3t5mpgjaw5ppnsp7gwt4534php">
-              <Bitcoin className="w-4 h-4 text-orange-500" />
-              <span className="hidden sm:inline">Support Value Tracker</span>
-              <span className="sm:hidden">Support</span>
-            </a>
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button 
+                variant="outline" 
+                className="gap-2 bg-card/80 backdrop-blur-sm border-orange-500/30 hover:bg-orange-500/10 hover:border-orange-500 hover:text-orange-500 transition-all"
+              >
+                <Bitcoin className="w-4 h-4 text-orange-500" />
+                <span className="hidden sm:inline">Support Value Tracker</span>
+                <span className="sm:hidden">Support</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2 text-orange-500">
+                  <Bitcoin className="w-5 h-5" />
+                  Support Value Tracker
+                </DialogTitle>
+              </DialogHeader>
+              <div className="flex flex-col items-center space-y-6 py-4">
+                <div className="bg-white p-4 rounded-lg">
+                  <QRCodeSVG 
+                    value={`bitcoin:${BITCOIN_ADDRESS}`}
+                    size={200}
+                    level="H"
+                    includeMargin={true}
+                  />
+                </div>
+                <div className="w-full space-y-2">
+                  <p className="text-sm text-muted-foreground text-center">
+                    Scan the QR code or copy the address below
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 bg-muted px-3 py-2 rounded text-xs break-all font-mono">
+                      {BITCOIN_ADDRESS}
+                    </code>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={copyToClipboard}
+                      className="shrink-0"
+                      data-testid="button-copy-address"
+                    >
+                      {copied ? (
+                        <Check className="w-4 h-4 text-green-500" />
+                      ) : (
+                        <Copy className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
+                  {copied && (
+                    <p className="text-xs text-green-500 text-center">Address copied!</p>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground text-center">
+                  Thank you for supporting this project!
+                </p>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* Header */}
