@@ -1,15 +1,19 @@
 import { useState, useMemo } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, Baby, TrendingUp, TrendingDown, Info } from "lucide-react";
+import { ArrowLeft, Baby, TrendingUp, TrendingDown, Info, Bitcoin, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { ITEMS, ItemData } from "@/data/items";
 import { CostChart } from "@/components/cost-chart";
 import background from "@assets/generated_images/subtle_dark_financial_data_visualization_abstract_background.png";
+import { QRCodeSVG } from "qrcode.react";
+
+const BITCOIN_ADDRESS = "bc1qakn7jw6wjuhr3t5mpgjaw5ppnsp7gwt4534php";
 
 export default function AdvancedInsights() {
   // Scroll to top when component mounts
@@ -20,6 +24,17 @@ export default function AdvancedInsights() {
   const [parentBirthYear, setParentBirthYear] = useState<string>("1965");
   const [parentAgeAtBirth, setParentAgeAtBirth] = useState<string>("30");
   const [selectedItemId, setSelectedItemId] = useState<string>("home");
+  const [copied, setCopied] = useState(false);
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(BITCOIN_ADDRESS);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
 
   const selectedItem = ITEMS.find(i => i.id === selectedItemId) || ITEMS.find(i => i.id === "home")!;
 
@@ -81,11 +96,74 @@ export default function AdvancedInsights() {
       />
 
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-6xl">
-        <Link href="/">
-          <Button variant="ghost" className="mb-6 gap-2 hover:bg-white/10">
-            <ArrowLeft className="h-4 w-4" /> Back to Overview
-          </Button>
-        </Link>
+        <div className="flex justify-between items-center mb-6">
+          <Link href="/">
+            <Button variant="ghost" className="gap-2 hover:bg-white/10">
+              <ArrowLeft className="h-4 w-4" /> Back to Overview
+            </Button>
+          </Link>
+          
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button 
+                variant="outline" 
+                className="gap-2 border-orange-500/50 text-orange-500 hover:bg-orange-500/10 hover:text-orange-400"
+                data-testid="button-donate-insights"
+              >
+                <Bitcoin className="w-4 h-4" />
+                <span className="hidden sm:inline">Support Value Tracker</span>
+                <span className="sm:hidden">Support</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md bg-slate-900 border-slate-700">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2 text-orange-500">
+                  <Bitcoin className="w-5 h-5" />
+                  Support Value Tracker
+                </DialogTitle>
+              </DialogHeader>
+              <div className="flex flex-col items-center space-y-6 py-4">
+                <div className="bg-white p-4 rounded-lg">
+                  <QRCodeSVG 
+                    value={`bitcoin:${BITCOIN_ADDRESS}`}
+                    size={200}
+                    level="H"
+                    includeMargin={true}
+                  />
+                </div>
+                <div className="w-full space-y-2">
+                  <p className="text-sm text-slate-300 text-center">
+                    Scan the QR code or copy the address below
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 bg-slate-800 px-3 py-2 rounded text-xs break-all font-mono text-slate-200">
+                      {BITCOIN_ADDRESS}
+                    </code>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={copyToClipboard}
+                      className="shrink-0 border-slate-600 hover:bg-slate-800"
+                      data-testid="button-copy-address-insights"
+                    >
+                      {copied ? (
+                        <Check className="w-4 h-4 text-green-500" />
+                      ) : (
+                        <Copy className="w-4 h-4 text-slate-300" />
+                      )}
+                    </Button>
+                  </div>
+                  {copied && (
+                    <p className="text-xs text-green-500 text-center">Address copied!</p>
+                  )}
+                </div>
+                <p className="text-xs text-slate-400 text-center">
+                  Thank you for supporting this project!
+                </p>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
 
         <header className="mb-12">
            <div className="inline-block px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono tracking-wider mb-2">
