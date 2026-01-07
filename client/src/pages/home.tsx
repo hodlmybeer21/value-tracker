@@ -60,7 +60,7 @@ export default function Home() {
                 <span className="sm:hidden">Support</span>
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md bg-slate-900 border-slate-700">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2 text-orange-500">
                   <Bitcoin className="w-5 h-5" />
@@ -77,24 +77,24 @@ export default function Home() {
                   />
                 </div>
                 <div className="w-full space-y-2">
-                  <p className="text-sm text-muted-foreground text-center">
+                  <p className="text-sm text-slate-300 text-center">
                     Scan the QR code or copy the address below
                   </p>
                   <div className="flex items-center gap-2">
-                    <code className="flex-1 bg-muted px-3 py-2 rounded text-xs break-all font-mono">
+                    <code className="flex-1 bg-slate-800 px-3 py-2 rounded text-xs break-all font-mono text-slate-200">
                       {BITCOIN_ADDRESS}
                     </code>
                     <Button 
                       size="sm" 
                       variant="outline"
                       onClick={copyToClipboard}
-                      className="shrink-0"
+                      className="shrink-0 border-slate-600 hover:bg-slate-800"
                       data-testid="button-copy-address"
                     >
                       {copied ? (
                         <Check className="w-4 h-4 text-green-500" />
                       ) : (
-                        <Copy className="w-4 h-4" />
+                        <Copy className="w-4 h-4 text-slate-300" />
                       )}
                     </Button>
                   </div>
@@ -102,7 +102,7 @@ export default function Home() {
                     <p className="text-xs text-green-500 text-center">Address copied!</p>
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground text-center">
+                <p className="text-xs text-slate-400 text-center">
                   Thank you for supporting this project!
                 </p>
               </div>
