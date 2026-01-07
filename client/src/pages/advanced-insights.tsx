@@ -259,13 +259,27 @@ export default function AdvancedInsights() {
                     Since <span className="font-bold text-foreground">{parentChildbirthYear}</span>, the cost of a <span className="font-bold text-foreground">{selectedItem.name}</span> has risen by <span className="font-bold text-red-400">{usdChange.toFixed(0)}%</span> in US Dollars.
                   </p>
                   
-                  <Separator className="my-4 bg-blue-500/20" />
+                  <Separator className="my-4 bg-yellow-500/20" />
                   
                   <p className="text-sm text-muted-foreground">
-                    However, priced in Gold, the cost has <span className={goldCostChange > 0 ? "text-red-400" : "text-green-400"}>
+                    <span className="text-yellow-500 font-semibold">Gold:</span> Priced in Gold, the cost has <span className={goldCostChange > 0 ? "text-red-400" : "text-green-400"}>
                       {goldCostChange > 0 ? "increased" : "decreased"} by {Math.abs(goldCostChange).toFixed(0)}%
-                    </span>. This suggests that assets like Gold have held their value better against inflation over your child's lifetime.
+                    </span>. Gold has historically preserved purchasing power against inflation.
                   </p>
+                  
+                  <Separator className="my-4 bg-orange-500/20" />
+                  
+                  {btcCostChange !== null ? (
+                    <p className="text-sm text-muted-foreground">
+                      <span className="text-orange-500 font-semibold">Bitcoin:</span> Priced in Bitcoin, the cost has <span className={btcCostChange > 0 ? "text-red-400" : "text-green-400"}>
+                        {btcCostChange > 0 ? "increased" : "decreased"} by {Math.abs(btcCostChange).toFixed(0)}%
+                      </span>. Bitcoin's dramatic appreciation has significantly increased its purchasing power.
+                    </p>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      <span className="text-orange-500 font-semibold">Bitcoin:</span> Bitcoin wasn't available in {parentChildbirthYear} (launched in 2009). Try selecting a more recent year to see Bitcoin comparisons.
+                    </p>
+                  )}
                </CardContent>
             </Card>
           </div>
