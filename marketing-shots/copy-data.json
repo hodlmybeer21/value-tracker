@@ -1,0 +1,30 @@
+{
+  "boomerHome_1985_to_2025": {
+    "preset": "Boomer parent (1955 birth, age 30 → era 1985)",
+    "item": "Median US Home",
+    "usdStart_1985": 83900,
+    "usdEnd_2025": 433000,
+    "usdChange": "+414%",
+    "goldChange": "preserved (modest rise)",
+    "btcChange": "not available — BTC launched 2009"
+  },
+  "millennialHome_2015_to_2025": {
+    "preset": "Millennial (1985 birth, age 30 → era 2015)",
+    "item": "Median US Home",
+    "usdStart_2015": 296400,
+    "usdEnd_2025": 433000,
+    "usdChange": "+46%",
+    "goldChange": "modest rise (~15%)",
+    "btcChange": "decreased significantly (-99%+) — BTC deflationary"
+  },
+  "toggleFeatures": [
+    "Track a Single Item",
+    "My Era vs. Now (Hot badge)"
+  ],
+  "shotNotes": {
+    "01": "Shows White Bread chart with toggle — toggle is in the Hero strip",
+    "04": "Boomer preset: +414% — strongest stat for a post",
+    "09": "Pre-overlay share card: +46% burden shift, framed with caption",
+    "10": "Contact sheet — preview of all 8 main shots"
+  }
+}
