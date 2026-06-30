@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, Baby, TrendingUp, Bitcoin, Copy, Check } from "lucide-react";
+import { ArrowLeft, Baby, TrendingUp, Bitcoin, Copy, Check, Share2, Calendar, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -12,19 +12,31 @@ import { ITEMS, ItemData } from "@/data/items";
 import { CostChart } from "@/components/cost-chart";
 import background from "@assets/generated_images/subtle_dark_financial_data_visualization_abstract_background.png";
 import { QRCodeSVG } from "qrcode.react";
+import { useToast } from "@/hooks/use-toast";
 
 const BITCOIN_ADDRESS = "bc1qakn7jw6wjuhr3t5mpgjaw5ppnsp7gwt4534php";
 
 export default function AdvancedInsights() {
   // Scroll to top when component mounts
-  useState(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
-  });
 
-  const [parentBirthYear, setParentBirthYear] = useState<string>("1965");
+    // Honor ?item= deep link so home → insights preserves the user's selection.
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const itemParam = params.get("item");
+      if (itemParam && ITEMS.some((i) => i.id === itemParam)) {
+        setSelectedItemId(itemParam);
+      }
+    }
+  }, []);
+
+  // Defaults: Millennial-typical — born 1985, had kids at 30 → "your era" = 2015 (the year Bitcoin was in mainstream narratives and just starting its big run)
+  const [parentBirthYear, setParentBirthYear] = useState<string>("1985");
   const [parentAgeAtBirth, setParentAgeAtBirth] = useState<string>("30");
   const [selectedItemId, setSelectedItemId] = useState<string>("home");
   const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
   const copyToClipboard = async () => {
     try {
@@ -33,6 +45,27 @@ export default function AdvancedInsights() {
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error("Failed to copy:", err);
+    }
+  };
+
+  const shareMyEra = async () => {
+    const url = `${window.location.origin}/advanced-insights?item=${encodeURIComponent(selectedItemId)}`;
+    const shareText = `Since ${parentEraYear}, the cost of a ${selectedItem.name.toLowerCase()} has risen ${usdChange.toFixed(0)}% in US Dollars. See yours →`;
+    const fullText = `${shareText} ${url}`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: `My era vs. now: ${selectedItem.name}`, text: shareText, url });
+      } else {
+        await navigator.clipboard.writeText(fullText);
+        toast({
+          title: "Link copied",
+          description: `Era, item, and numbers — paste anywhere.`,
+        });
+      }
+    } catch (err) {
+      // User cancelled share — do nothing
+      console.error("Share failed:", err);
     }
   };
 
@@ -242,6 +275,41 @@ export default function AdvancedInsights() {
                   </div>
                 </div>
 
+                {/* Quick presets */}
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-1.5">
+                    <Users className="w-3.5 h-3.5" />
+                    One-tap presets
+                  </Label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[
+                      { label: "Boomer parent", year: "1955", age: "30" },
+                      { label: "Gen X parent", year: "1975", age: "32" },
+                      { label: "Millennial", year: "1985", age: "30" },
+                      { label: "Gen Z", year: "1995", age: "26" },
+                    ].map((p) => {
+                      const active = parentBirthYear === p.year && parentAgeAtBirth === p.age;
+                      return (
+                        <button
+                          key={p.label}
+                          onClick={() => {
+                            setParentBirthYear(p.year);
+                            setParentAgeAtBirth(p.age);
+                          }}
+                          className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all border ${
+                            active
+                              ? "bg-blue-500 text-white border-blue-500"
+                              : "bg-card text-muted-foreground border-border hover:border-blue-500/50 hover:text-blue-400"
+                          }`}
+                          data-testid={`preset-${p.label.toLowerCase().replace(/\s+/g, "-")}`}
+                        >
+                          {p.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 <div className="rounded-lg bg-primary/5 p-4 text-sm text-muted-foreground">
                   <p className="font-mono text-xs uppercase mb-1 text-primary">Comparison Era</p>
                   <div className="flex items-center gap-2 mb-1">
@@ -288,6 +356,16 @@ export default function AdvancedInsights() {
                       <span className="text-orange-500 font-semibold">Bitcoin:</span> Bitcoin wasn't available in {parentEraYear} (launched in 2009). Try selecting a more recent year to see Bitcoin comparisons.
                     </p>
                   )}
+
+                  <Button
+                    onClick={shareMyEra}
+                    variant="outline"
+                    className="w-full mt-4 border-blue-500/40 text-blue-400 hover:bg-blue-500/10"
+                    data-testid="button-share-era"
+                  >
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Share my era with someone who'd relate
+                  </Button>
                </CardContent>
             </Card>
           </div>

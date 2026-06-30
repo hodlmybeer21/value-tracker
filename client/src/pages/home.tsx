@@ -10,8 +10,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import background from "@assets/generated_images/subtle_dark_financial_data_visualization_abstract_background.png";
 import { QRCodeSVG } from "qrcode.react";
 
-import { Bitcoin, Copy, Check, Baby } from "lucide-react";
+import { Bitcoin, Copy, Check, Baby, Sparkles, LineChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+type ViewMode = "single" | "insights";
 
 const BITCOIN_ADDRESS = "bc1qakn7jw6wjuhr3t5mpgjaw5ppnsp7gwt4534php";
 
@@ -19,6 +21,14 @@ export default function Home() {
   const [items] = useState<ItemData[]>(ITEMS);
   const [selectedItemId, setSelectedItemId] = useState<string>(ITEMS[0].id);
   const [copied, setCopied] = useState(false);
+  const [mode, setMode] = useState<ViewMode>(() => {
+    // Honor ?mode=insights for direct deep links / shared URLs
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("mode") === "insights") return "insights";
+    }
+    return "single";
+  });
 
   const selectedItem = items.find((i) => i.id === selectedItemId) || items[0];
 
@@ -30,6 +40,15 @@ export default function Home() {
     } catch (err) {
       console.error("Failed to copy:", err);
     }
+  };
+
+  const handleModeChange = (next: ViewMode) => {
+    if (next === "insights") {
+      // Preserve the user's currently selected item — feels personal, not random
+      window.location.href = `/advanced-insights?item=${encodeURIComponent(selectedItemId)}`;
+      return;
+    }
+    setMode(next);
   };
 
   return (
@@ -122,6 +141,43 @@ export default function Home() {
             See how the cost of everyday items has changed when measured in Dollars, Gold, and Bitcoin.
           </p>
         </header>
+
+        {/* View Mode Switcher */}
+        <div className="mb-10 flex justify-center">
+          <div className="inline-flex items-center gap-1 p-1 rounded-full bg-card/60 backdrop-blur-sm border border-border shadow-sm">
+            <button
+              onClick={() => handleModeChange("single")}
+              className={`px-4 sm:px-6 py-2.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
+                mode === "single"
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              data-testid="mode-single"
+              aria-pressed={mode === "single"}
+            >
+              <LineChart className="w-4 h-4" />
+              <span className="hidden sm:inline">Track a Single Item</span>
+              <span className="sm:hidden">Single Item</span>
+            </button>
+            <button
+              onClick={() => handleModeChange("insights")}
+              className={`px-4 sm:px-6 py-2.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
+                mode === "insights"
+                  ? "bg-blue-500 text-white shadow-md"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              data-testid="mode-insights"
+              aria-pressed={mode === "insights"}
+            >
+              <Sparkles className="w-4 h-4" />
+              <span className="hidden sm:inline">My Era vs. Now</span>
+              <span className="sm:hidden">My Era</span>
+              <span className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded-full bg-blue-500/20 border border-blue-300/30 text-[10px] font-mono tracking-wider uppercase">
+                Hot
+              </span>
+            </button>
+          </div>
+        </div>
 
         {/* Controls */}
         <div className="mb-8 flex justify-center">
@@ -228,22 +284,25 @@ export default function Home() {
           </Card>
         </div>
         
-        <div className="flex justify-center mb-20">
-          <Link href="/advanced-insights">
-            <Card className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/30 hover:border-blue-500/60 transition-all hover:-translate-y-0.5 cursor-pointer max-w-2xl w-full">
+        <div className="mb-20">
+          <Link href={`/advanced-insights?item=${encodeURIComponent(selectedItemId)}`}>
+            <Card className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/30 hover:border-blue-500/60 transition-all hover:-translate-y-0.5 cursor-pointer w-full">
               <CardContent className="p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-4">
                 <div className="shrink-0 h-12 w-12 rounded-full bg-blue-500/20 flex items-center justify-center">
-                  <Baby className="h-6 w-6 text-blue-400" />
+                  <Sparkles className="h-6 w-6 text-blue-400" />
                 </div>
                 <div className="flex-1 text-left">
                   <div className="inline-block px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono tracking-wider mb-2">
-                    GENERATIONAL INSIGHTS
+                    YOUR GENERATION · {selectedItem.emoji} {selectedItem.name}
                   </div>
-                  <h3 className="text-xl font-bold mb-1">Bridge the Generation Gap →</h3>
+                  <h3 className="text-xl md:text-2xl font-bold mb-2">See what {new Date().getFullYear() - (1985 + 30)} years of inflation cost your family</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    See exactly what got lost (and what survived) between when your parents had kids and today.
-                    Compare any item across two eras, in USD, Gold, and Bitcoin.
+                    Most people land here, pick an item, and never realize the <em>real</em> story is in the years you've lived through.
+                    Enter your birth year and the year you started a family — we'll compare a {selectedItem.name.toLowerCase()} then vs. now, in USD, Gold, and Bitcoin.
                   </p>
+                  <div className="mt-4 inline-flex items-center gap-2 text-blue-400 font-medium text-sm">
+                    Bridge the Generation Gap →
+                  </div>
                 </div>
               </CardContent>
             </Card>
