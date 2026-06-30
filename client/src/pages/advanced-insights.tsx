@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, Baby, TrendingUp, TrendingDown, Info, Bitcoin, Copy, Check } from "lucide-react";
+import { ArrowLeft, Baby, TrendingUp, Bitcoin, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -45,14 +45,23 @@ export default function AdvancedInsights() {
   const parentEraStart = parentYear + 20; // Assume "Adult" life starts at 20? Or specifically when they had kids?
   // Text says "Parent's Era (e.g., cost when you had kids)"
   const parentChildbirthYear = parentYear + ageAtBirth;
-  const currentYear = 2025;
-  
-  // Find data points
-  const parentEraData = selectedItem.data.find(d => d.year === parentChildbirthYear) || 
-                        selectedItem.data.find(d => d.year === Math.floor(parentChildbirthYear/5)*5) || // Approximate to nearest available year
-                        selectedItem.data[0];
+  const currentYear = new Date().getFullYear();
 
-  const currentEraData = selectedItem.data.find(d => d.year === currentYear) || selectedItem.data[selectedItem.data.length - 1];
+  // Find data points — track the actual year used so labels don't lie about which year is shown
+  const findEraData = (targetYear: number) => {
+    return (
+      selectedItem.data.find(d => d.year === targetYear) ||
+      selectedItem.data.find(d => d.year === Math.floor(targetYear / 5) * 5) ||
+      selectedItem.data[0]
+    );
+  };
+  const parentEraData = findEraData(parentChildbirthYear);
+  const parentEraYear = parentEraData.year;
+  const parentEraWasFallback = parentEraYear !== parentChildbirthYear;
+
+  const currentEraData = findEraData(currentYear);
+  const currentEraYear = currentEraData.year;
+  const currentEraWasFallback = currentEraYear !== currentYear;
 
   // Calculate Shifts
   const calculateChange = (start: number, end: number) => {
@@ -73,14 +82,13 @@ export default function AdvancedInsights() {
   const btcCostEnd = currentEraData.btcPriceUSD ? currentEraData.itemPriceUSD / currentEraData.btcPriceUSD : null;
   const btcCostChange = (btcCostStart && btcCostEnd) ? calculateChange(btcCostStart, btcCostEnd) : null;
 
-  // Filter data for the chart to start from Parent's Childbirth Year
-  // We actually want to show the trend from when the parent had kids until now
+  // Filter data for the chart to start from the ACTUAL era year shown (so the chart and labels agree)
   const filteredItem = useMemo(() => {
     return {
       ...selectedItem,
-      data: selectedItem.data.filter(d => d.year >= parentChildbirthYear)
+      data: selectedItem.data.filter(d => d.year >= parentEraYear)
     };
-  }, [selectedItem, parentChildbirthYear]);
+  }, [selectedItem, parentEraYear]);
 
 
   return (
@@ -238,11 +246,11 @@ export default function AdvancedInsights() {
                   <p className="font-mono text-xs uppercase mb-1 text-primary">Comparison Era</p>
                   <div className="flex items-center gap-2 mb-1">
                     <span>Parent's Era:</span>
-                    <span className="font-bold text-foreground">{parentChildbirthYear}</span>
+                    <span className="font-bold text-foreground">{parentEraYear}{parentEraWasFallback && <span className="text-xs text-muted-foreground font-normal"> (closest available)</span>}</span>
                   </div>
                    <div className="flex items-center gap-2">
                     <span>Current Era:</span>
-                    <span className="font-bold text-foreground">{currentYear}</span>
+                    <span className="font-bold text-foreground">{currentEraYear}{currentEraWasFallback && <span className="text-xs text-muted-foreground font-normal"> (closest available)</span>}</span>
                   </div>
                 </div>
 
@@ -256,7 +264,7 @@ export default function AdvancedInsights() {
                </CardHeader>
                <CardContent>
                   <p className="text-lg leading-relaxed">
-                    Since <span className="font-bold text-foreground">{parentChildbirthYear}</span>, the cost of a <span className="font-bold text-foreground">{selectedItem.name}</span> has risen by <span className="font-bold text-red-400">{usdChange.toFixed(0)}%</span> in US Dollars.
+                    Since <span className="font-bold text-foreground">{parentEraYear}</span>, the cost of a <span className="font-bold text-foreground">{selectedItem.name}</span> has risen by <span className="font-bold text-red-400">{usdChange.toFixed(0)}%</span> in US Dollars.
                   </p>
                   
                   <Separator className="my-4 bg-yellow-500/20" />
@@ -277,7 +285,7 @@ export default function AdvancedInsights() {
                     </p>
                   ) : (
                     <p className="text-sm text-muted-foreground">
-                      <span className="text-orange-500 font-semibold">Bitcoin:</span> Bitcoin wasn't available in {parentChildbirthYear} (launched in 2009). Try selecting a more recent year to see Bitcoin comparisons.
+                      <span className="text-orange-500 font-semibold">Bitcoin:</span> Bitcoin wasn't available in {parentEraYear} (launched in 2009). Try selecting a more recent year to see Bitcoin comparisons.
                     </p>
                   )}
                </CardContent>
@@ -290,7 +298,7 @@ export default function AdvancedInsights() {
               <CardHeader>
                 <CardTitle>Cost Burden Evolution</CardTitle>
                 <CardDescription>
-                  Tracking the cost of {selectedItem.name} from {parentChildbirthYear} to {currentYear}.
+                  Tracking the cost of {selectedItem.name} from {parentEraYear} to {currentEraYear}.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -298,13 +306,13 @@ export default function AdvancedInsights() {
                 
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="p-4 rounded-lg bg-card border border-border">
-                    <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Cost in {parentChildbirthYear}</div>
+                    <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Cost in {parentEraYear}</div>
                     <div className="text-2xl font-bold">${parentEraData.itemPriceUSD.toLocaleString()}</div>
                     <div className="text-xs text-muted-foreground mt-1">USD (Nominal)</div>
                   </div>
                   
                   <div className="p-4 rounded-lg bg-card border border-border">
-                    <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Cost in {currentYear}</div>
+                    <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Cost in {currentEraYear}</div>
                     <div className="text-2xl font-bold">${currentEraData.itemPriceUSD.toLocaleString()}</div>
                     <div className="text-xs text-muted-foreground mt-1">USD (Nominal)</div>
                   </div>
@@ -330,13 +338,17 @@ export default function AdvancedInsights() {
                     <TrendingUp className="h-5 w-5 text-green-500" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold mb-2">Strategic Takeaway</h3>
+                    <h3 className="text-lg font-bold mb-2">The Handoff Is Coming</h3>
                     <p className="text-muted-foreground leading-relaxed">
-                      While the USD cost has increased significantly, this highlights the importance of asset allocation. 
-                      Parents who stored wealth in scarce assets (like Real Estate or Gold) were able to preserve purchasing power 
-                      for the next generation, whereas holding cash resulted in a loss of power.
+                      The biggest transfer of business and personal wealth in U.S. history is underway.
+                      When a Boomer-era portfolio of cash, real estate, and retirement accounts lands on a millennial's desk,
+                      the numbers above are what determines whether that handoff preserves a life or quietly erodes it.
                       <br/><br/>
-                      For the current generation, digital scarcity (Bitcoin) offers a modern tool to hedge against this continued monetary expansion.
+                      Holding cash over the last {currentEraYear - parentEraYear} years cost the average household the purchasing power you just saw.
+                      Scarce assets — real estate, gold, and for the next generation, Bitcoin — preserved it.
+                      Understanding this isn't optional anymore. It's the foundation of the next decade.
+                      <br/><br/>
+                      <a href="https://goodbotai.tech" className="text-primary hover:underline font-medium">More from Tyler + GoodBot →</a>
                     </p>
                   </div>
                 </div>

@@ -26,8 +26,8 @@ const BASE_FINANCIALS: Record<number, { gold: number, btc: number | null }> = {
   2005: { gold: 444, btc: null },
   2008: { gold: 871, btc: null },
   2009: { gold: 972, btc: 0.0009 },
-  2010: { gold: 1224, btc: 0.09 }, 
-  2011: { gold: 1571, btc: 10 }, 
+  2010: { gold: 1224, btc: 0.30 },
+  2011: { gold: 1571, btc: 4.70 }, 
   2012: { gold: 1668, btc: 13 },
   2013: { gold: 1411, btc: 750 },
   2014: { gold: 1266, btc: 320 },
@@ -40,8 +40,8 @@ const BASE_FINANCIALS: Record<number, { gold: number, btc: number | null }> = {
   2021: { gold: 1799, btc: 46000 },
   2022: { gold: 1800, btc: 16500 },
   2023: { gold: 2000, btc: 42000 },
-  2024: { gold: 2300, btc: 65000 },
-  2025: { gold: 4460, btc: 95000 },
+  2024: { gold: 2620, btc: 93429 },
+  2025: { gold: 2400, btc: 95000 },
 };
 
 // Helper to construct data points

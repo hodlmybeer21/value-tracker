@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import background from "@assets/generated_images/subtle_dark_financial_data_visualization_abstract_background.png";
 import { QRCodeSVG } from "qrcode.react";
 
-import { Bitcoin, Copy, Check } from "lucide-react";
+import { Bitcoin, Copy, Check, Baby } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const BITCOIN_ADDRESS = "bc1qakn7jw6wjuhr3t5mpgjaw5ppnsp7gwt4534php";
@@ -229,11 +229,24 @@ export default function Home() {
         </div>
         
         <div className="flex justify-center mb-20">
-           <Link href="/advanced-insights">
-            <Button variant="ghost" className="group text-muted-foreground hover:text-primary transition-colors">
-              Advanced Insights 
-              <span className="ml-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">→</span>
-            </Button>
+          <Link href="/advanced-insights">
+            <Card className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/30 hover:border-blue-500/60 transition-all hover:-translate-y-0.5 cursor-pointer max-w-2xl w-full">
+              <CardContent className="p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-4">
+                <div className="shrink-0 h-12 w-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+                  <Baby className="h-6 w-6 text-blue-400" />
+                </div>
+                <div className="flex-1 text-left">
+                  <div className="inline-block px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono tracking-wider mb-2">
+                    GENERATIONAL INSIGHTS
+                  </div>
+                  <h3 className="text-xl font-bold mb-1">Bridge the Generation Gap →</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    See exactly what got lost (and what survived) between when your parents had kids and today.
+                    Compare any item across two eras, in USD, Gold, and Bitcoin.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </Link>
         </div>
         
@@ -242,8 +255,11 @@ export default function Home() {
           <p className="text-muted-foreground text-sm mb-2">
             Data Sources: FRED (St. Louis Fed), U.S. Census Bureau, Yahoo Finance.
           </p>
-          <p className="text-muted-foreground/60 text-xs">
+          <p className="text-muted-foreground/60 text-xs mb-4">
             *Data is for educational purposes only. Past performance does not guarantee future results.
+          </p>
+          <p className="text-muted-foreground/60 text-xs">
+            Part of <a href="https://goodbotai.tech" className="text-primary hover:underline">GoodBotAI</a> — Tyler + AI, documenting what human + AI can ship.
           </p>
         </footer>
 
