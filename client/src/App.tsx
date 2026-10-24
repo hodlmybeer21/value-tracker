@@ -6,12 +6,14 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import AdvancedInsights from "@/pages/advanced-insights";
+import Generations from "@/pages/generations";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/advanced-insights" component={AdvancedInsights} />
+      <Route path="/generations" component={Generations} />
       <Route component={NotFound} />
     </Switch>
   );
