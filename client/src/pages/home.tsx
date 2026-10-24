@@ -147,6 +147,15 @@ export default function Home() {
           </p>
         </header>
 
+        {/* New: generations page */}
+        <div className="mb-6 flex justify-center">
+          <Link href="/generations">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-300 text-sm hover:bg-blue-500/20 transition-colors cursor-pointer" data-testid="nav-generations">
+              <Baby className="w-4 h-4" /> New: What did the year your kid was born really cost? →
+            </span>
+          </Link>
+        </div>
+
         {/* View Mode Switcher */}
         <div className="mb-10 flex justify-center">
           <div className="inline-flex items-center gap-1 p-1 rounded-full bg-card/60 backdrop-blur-sm border border-border shadow-sm">

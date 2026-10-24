@@ -126,11 +126,18 @@ export default function AdvancedInsights() {
 
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-6xl">
         <div className="flex justify-between items-center mb-6">
-          <Link href="/">
-            <Button variant="ghost" className="gap-2 hover:bg-white/10">
-              <ArrowLeft className="h-4 w-4" /> Back to Overview
-            </Button>
-          </Link>
+          <div className="flex items-center gap-1">
+            <Link href="/">
+              <Button variant="ghost" className="gap-2 hover:bg-white/10">
+                <ArrowLeft className="h-4 w-4" /> Back to Overview
+              </Button>
+            </Link>
+            <Link href="/generations">
+              <Button variant="ghost" className="gap-2 hover:bg-white/10 text-blue-400" data-testid="nav-generations-insights">
+                <Baby className="h-4 w-4" /> <span className="hidden sm:inline">Your kid's year</span><span className="sm:hidden">Kid's year</span>
+              </Button>
+            </Link>
+          </div>
           
           <Dialog>
             <DialogTrigger asChild>
