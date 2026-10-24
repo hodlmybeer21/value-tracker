@@ -10,7 +10,7 @@ Captured: 2026-06-30
 | 03-insights-burden-shift-square.png | 1080x1080 | Cropped to the Burden Shift card alone — square format for IG/X | Square-friendly share card |
 | 04-insights-boomer-preset.png | 1080x1350 | Boomer preset: 1985→2025 home, **+414%** USD rise. Portrait format | **Single strongest stat — fires on boomer-handoff framing** |
 | 05-home-insights-mode-flagged.png | 1600x900 | Home scrolled to the rewritten Insights CTA: "See what 41 years of inflation cost your family" | Mid-funnel post |
-| 06-bitcoin-deflation-chart.png | 1600x900 | Bitcoin Deflationary View: orange log-scale line dropping from 100 (2009) to ~1e-4 (2025) | Bitcoin-deflation / "BTC preserved purchasing power" post |
+| 06-bitcoin-deflation-chart.png | 1600x900 | Bitcoin Deflationary View: orange log-scale line (screenshot predates the Oct 2026 data fix: it showed a 2009 BTC price that did not exist; regenerate before use) | Bitcoin-deflation / "BTC preserved purchasing power" post |
 | 07-portrait-mobile-hero.png | 1080x1350 | Mobile home, but cropped awkwardly (toggle not visible) | Mobile-fit test — recommend re-shoot |
 | 08-portrait-mobile-insights.png | 1080x1350 | Mobile Insights intro: "Bridge the Generation Gap" headline + intro copy | Mobile-responsive proof |
 | 09-overlay-card.png | 1600x900 | Composite: burden shift +46% with overlay caption "Since 2015 · a home costs X% more in USD" — X-card ready | **First-post candidate — share-ready** |

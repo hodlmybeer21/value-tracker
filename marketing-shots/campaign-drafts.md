@@ -4,11 +4,15 @@ Voice: Tyler's "Trenches operator + AI" voice — direct, data-driven, hooks wit
 
 Schedule plan: spread over 5 days, 2/day, posting at 12 PM ET and 5 PM ET to avoid collisions with the daily macro-thesis threads (10 AM ET approval, 5 AM ET post).
 
+> ⚠️ **Data fix (Oct 2026):** The numbers in these drafts predate the data audit fix
+> (e.g. the old home figures $296,400 / $433,000 / +46% / +414%). Re-verify every number against the
+> live site before posting. Draft 03 ("In 2009, 1 BTC bought a car") was removed: Bitcoin had no
+> market price in 2009 (first market price Jul 2010; ~$0.30 at end of 2010), so the claim was false.
+
 | # | Image | Post text (≤280 char) | Hashtags | Cashtags | When |
 |---|-------|----------------------|----------|----------|------|
 | 01 | 04-boomer-preset.png | "My parents bought a home in 1985 for $83,900. That same home: $433,000 today. That's +414% in 40 years. The biggest wealth transfer in U.S. history is happening. Most of it lands unprepared. tracker.goodbotai.tech → see YOUR era vs now." | #GenerationalWealth #PurchasingPower #RealEstate | $BTC $GLD $SPY | Day 1, 12 PM ET |
 | 02 | 09-overlay-card.png | "Since 2015, a median US home went from $296,400 → $433,000. +46% in 10 years. Pick your birth year. Pick when you started a family. See what YOUR era actually cost you. No cookie banners. No paywall. tracker.goodbotai.tech" | #Inflation #Millennials #PurchasingPower | $BTC $GLD $TLH | Day 1, 5 PM ET |
-| 03 | 06-bitcoin-deflation-chart.png | "In 2009, 1 BTC bought a car. In 2025, 1 BTC buys about 16 luxury cars. This is what 'store of value' actually looks like. Orange line = logarithmic. tracker.goodbotai.tech lets you see every item, every era, in USD · Gold · Bitcoin." | #Bitcoin #SoundMoney #StoreOfValue | $BTC | Day 2, 12 PM ET |
 | 04 | 01-home-hero-toggle.png | "New build: tracker.goodbotai.tech Two modes. Track a single item across decades. Or compare YOUR generation's era vs today. Every item, in USD · Gold · Bitcoin. Built by Tyler + GoodBot — human + AI, weeks not months." | #BuildInPublic #AItools #HumanAndAI | $BTC $GLD | Day 2, 5 PM ET |
 | 05 | 02-insights-millennial.png | "Most financial tools show you a chart. This one asks 'when did you start a family?' — and shows you the % shift between YOUR moment and now. That's the difference between a tool and a mirror. tracker.goodbotai.tech" | #FinTok #PersonalFinance #SelfAwareness | $BTC $GLD $SPY | Day 3, 12 PM ET |
 | 06 | 05-home-insights-mode-flagged.png | "'See what 41 years of inflation cost your family.' That's the new headline on the home page. Not 'track an item.' Not 'visualize data.' A direct line to YOUR number. Built by Tyler + GoodBot. Free, no signup. tracker.goodbotai.tech" | #FamilyFinance #InflationReality #RealTalk | $GLD | Day 3, 5 PM ET |

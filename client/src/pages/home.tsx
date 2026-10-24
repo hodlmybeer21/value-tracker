@@ -4,6 +4,8 @@ import { ITEMS, ItemData } from "@/data/items";
 import { CostChart } from "@/components/cost-chart";
 import { BitcoinChart } from "@/components/bitcoin-chart";
 import { PriceTable } from "@/components/price-table";
+import { DataSources } from "@/components/data-sources";
+import { latestPoint } from "@/lib/era";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -31,6 +33,9 @@ export default function Home() {
   });
 
   const selectedItem = items.find((i) => i.id === selectedItemId) || items[0];
+  // Years from the 1985-born, became-a-parent-at-30 example (2015) to the
+  // latest year in the data, not the browser clock.
+  const ctaYears = latestPoint(selectedItem).year - (1985 + 30);
 
   const copyToClipboard = async () => {
     try {
@@ -132,7 +137,7 @@ export default function Home() {
         {/* Header */}
         <header className="mt-16 mb-12 text-center space-y-4 md:mt-0">
           <div className="inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-mono tracking-wider mb-2">
-            PURCHASING POWER PARITY
+            PURCHASING POWER OVER TIME
           </div>
           <h1 className="text-4xl md:text-6xl font-display font-bold tracking-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
             The Real Cost of Living
@@ -193,6 +198,7 @@ export default function Home() {
                 {items.map((item) => (
                   <SelectItem key={item.id} value={item.id} className="text-base py-3 cursor-pointer text-slate-900 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:font-semibold data-[state=checked]:text-slate-900">
                     <span className="mr-2">{item.emoji}</span> {item.name}
+                    {item.status === "estimate" && <span className="ml-1 text-xs text-amber-600">(estimate)</span>}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -205,9 +211,14 @@ export default function Home() {
           <CardContent className="p-6 md:p-8">
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold flex items-center gap-2">
+                <h2 className="text-2xl font-bold flex items-center gap-2 flex-wrap">
                   <span className="text-3xl">{selectedItem.emoji}</span>
                   {selectedItem.name}
+                  {selectedItem.status === "estimate" && (
+                    <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-400">
+                      Estimate · unverified
+                    </span>
+                  )}
                 </h2>
                 <p className="text-muted-foreground text-sm mt-1">
                   {selectedItem.description}
@@ -215,7 +226,9 @@ export default function Home() {
               </div>
               <div className="hidden md:block text-right">
                 <div className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-1">Base Year</div>
-                <div className="font-mono font-bold text-xl">{selectedItem.data[0].year}</div>
+                <div className="font-mono font-bold text-xl">
+                  {selectedItem.data.find((d) => d.itemPriceUSD !== null)?.label}–{latestPoint(selectedItem).label}
+                </div>
               </div>
             </div>
             
@@ -225,6 +238,9 @@ export default function Home() {
               <span className="inline-block w-3 h-3 rounded-full bg-primary mr-2 align-middle"></span>Rising line = More expensive (Purchasing Power Lost)
               <span className="mx-4 text-border">|</span>
               <span className="inline-block w-3 h-3 rounded-full bg-chart-3 mr-2 align-middle"></span>Falling line = Cheaper (Purchasing Power Gained)
+            </div>
+            <div className="mt-6 border-t border-border/50 pt-4">
+              <DataSources item={selectedItem} />
             </div>
           </CardContent>
         </Card>
@@ -241,7 +257,7 @@ export default function Home() {
                   Bitcoin Deflationary View
                 </h2>
                 <p className="text-muted-foreground text-sm mt-1">
-                  A focused look at the cost in Bitcoin (Logarithmic Scale). This demonstrates the dramatic increase in Bitcoin's purchasing power over time.
+                  A focused look at the cost in Bitcoin (logarithmic scale), from 2010, the first year Bitcoin had a market price.
                 </p>
             </div>
             <BitcoinChart item={selectedItem} />
@@ -295,7 +311,7 @@ export default function Home() {
                   <div className="inline-block px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono tracking-wider mb-2">
                     YOUR GENERATION · {selectedItem.emoji} {selectedItem.name}
                   </div>
-                  <h3 className="text-xl md:text-2xl font-bold mb-2">See what {new Date().getFullYear() - (1985 + 30)} years of inflation cost your family</h3>
+                  <h3 className="text-xl md:text-2xl font-bold mb-2">See what {ctaYears} years of inflation cost your family</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     Most people land here, pick an item, and never realize the <em>real</em> story is in the years you've lived through.
                     Enter your birth year and the year you started a family — we'll compare a {selectedItem.name.toLowerCase()} then vs. now, in USD, Gold, and Bitcoin.
@@ -312,7 +328,8 @@ export default function Home() {
         {/* Footer */}
         <footer className="text-center border-t border-border pt-8">
           <p className="text-muted-foreground text-sm mb-2">
-            Data Sources: FRED (St. Louis Fed), U.S. Census Bureau, Yahoo Finance.
+            Data sources: BLS &amp; Census via FRED (St. Louis Fed), Census ACS, College Board, The Economist, USPS, World Bank (gold), StatMuse (Bitcoin), Yahoo Finance (S&amp;P 500).
+            Items marked “estimate” are unverified.
           </p>
           <p className="text-muted-foreground/60 text-xs mb-4">
             *Data is for educational purposes only. Past performance does not guarantee future results.

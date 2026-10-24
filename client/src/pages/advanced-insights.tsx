@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { ITEMS, ItemData } from "@/data/items";
 import { CostChart } from "@/components/cost-chart";
+import { DataSources } from "@/components/data-sources";
+import { findEraPoint, latestPoint, pctChange, costIn, formatPctAbs, formatPctSigned } from "@/lib/era";
 import background from "@assets/generated_images/subtle_dark_financial_data_visualization_abstract_background.png";
 import { QRCodeSVG } from "qrcode.react";
 import { useToast } from "@/hooks/use-toast";
@@ -48,87 +50,66 @@ export default function AdvancedInsights() {
     }
   };
 
-  const shareMyEra = async () => {
-    const url = `${window.location.origin}/advanced-insights?item=${encodeURIComponent(selectedItemId)}`;
-    const shareText = `Since ${parentEraYear}, the cost of a ${selectedItem.name.toLowerCase()} has risen ${usdChange.toFixed(0)}% in US Dollars. See yours →`;
-    const fullText = `${shareText} ${url}`;
 
+  const selectedItem = ITEMS.find(i => i.id === selectedItemId) || ITEMS.find(i => i.id === "home")!;
+
+  // Calculations
+  const parentYear = Number(parentBirthYear);
+  const ageAtBirth = Number(parentAgeAtBirth);
+  const parentChildbirthYear = parentBirthYear.trim() && parentAgeAtBirth.trim() ? parentYear + ageAtBirth : NaN;
+
+  // "Now" = latest year in the data (e.g. "2026 YTD"), never the browser clock.
+  const currentEraData = latestPoint(selectedItem);
+  const currentEraYear = currentEraData.year;
+  const currentEraLabel = currentEraData.label;
+
+  // Truly nearest year with data. Out-of-range years get a message, never a silent 1970 fallback.
+  const lookup = findEraPoint(selectedItem, parentChildbirthYear);
+  const eraError = lookup.ok ? null : lookup.message;
+  const parentEraData = lookup.ok ? lookup.point : null;
+  const parentEraYear = parentEraData ? parentEraData.year : currentEraYear;
+  const parentEraLabel = parentEraData ? parentEraData.label : "";
+  const parentEraWasFallback = lookup.ok && lookup.snapped;
+
+  const startUSD = parentEraData?.itemPriceUSD ?? null;
+  const endUSD = currentEraData.itemPriceUSD;
+  const usdChange = pctChange(startUSD, endUSD);
+
+  // Cost in gold / BTC / SPY shares (lower cost = more purchasing power)
+  const goldCostChange = pctChange(costIn(startUSD, parentEraData?.goldPriceUSD), costIn(endUSD, currentEraData.goldPriceUSD));
+  // Bitcoin had no market price before Jul 2010
+  const btcCostChange = pctChange(costIn(startUSD, parentEraData?.btcPriceUSD), costIn(endUSD, currentEraData.btcPriceUSD));
+  // Before 1995 the SPY column is the S&P 500 index / 10 (SPY launched 1993)
+  const spyCostChange = pctChange(costIn(startUSD, parentEraData?.spyPriceUSD), costIn(endUSD, currentEraData.spyPriceUSD));
+  const spyIsProxyPre1993 = parentEraYear < 1993;
+  const anyUnverified = !!(parentEraData?.itemUnverified || currentEraData.itemUnverified);
+
+  const shareMyEra = async () => {
+    if (usdChange === null) return;
+    const url = `${window.location.origin}/advanced-insights?item=${encodeURIComponent(selectedItemId)}`;
+    const shareText = `Since ${parentEraLabel}, the cost of a ${selectedItem.name.toLowerCase()} has changed ${formatPctSigned(usdChange)} in US Dollars (to ${currentEraLabel}). See yours →`;
+    const fullText = `${shareText} ${url}`;
     try {
       if (navigator.share) {
         await navigator.share({ title: `My era vs. now: ${selectedItem.name}`, text: shareText, url });
       } else {
         await navigator.clipboard.writeText(fullText);
-        toast({
-          title: "Link copied",
-          description: `Era, item, and numbers — paste anywhere.`,
-        });
+        toast({ title: "Link copied", description: `Era, item, and numbers — paste anywhere.` });
       }
     } catch (err) {
-      // User cancelled share — do nothing
       console.error("Share failed:", err);
     }
   };
 
-  const selectedItem = ITEMS.find(i => i.id === selectedItemId) || ITEMS.find(i => i.id === "home")!;
+  const changeWord = (c: number) => (c > 0 ? "increased" : "decreased");
 
-  // Calculations
-  const parentYear = parseInt(parentBirthYear);
-  const ageAtBirth = parseInt(parentAgeAtBirth);
-  
-  const parentEraStart = parentYear + 20; // Assume "Adult" life starts at 20? Or specifically when they had kids?
-  // Text says "Parent's Era (e.g., cost when you had kids)"
-  const parentChildbirthYear = parentYear + ageAtBirth;
-  const currentYear = new Date().getFullYear();
-
-  // Find data points — track the actual year used so labels don't lie about which year is shown
-  const findEraData = (targetYear: number) => {
-    return (
-      selectedItem.data.find(d => d.year === targetYear) ||
-      selectedItem.data.find(d => d.year === Math.floor(targetYear / 5) * 5) ||
-      selectedItem.data[0]
-    );
-  };
-  const parentEraData = findEraData(parentChildbirthYear);
-  const parentEraYear = parentEraData.year;
-  const parentEraWasFallback = parentEraYear !== parentChildbirthYear;
-
-  const currentEraData = findEraData(currentYear);
-  const currentEraYear = currentEraData.year;
-  const currentEraWasFallback = currentEraYear !== currentYear;
-
-  // Calculate Shifts
-  const calculateChange = (start: number, end: number) => {
-    if (!start) return 0;
-    return ((end - start) / start) * 100;
-  };
-
-  const usdChange = calculateChange(parentEraData.itemPriceUSD, currentEraData.itemPriceUSD);
-  
-  // Gold/BTC purchasing power logic is inverse of price (lower cost = higher purchasing power)
-  // Cost in Gold
-  const goldCostStart = parentEraData.itemPriceUSD / (parentEraData.goldPriceUSD || 1);
-  const goldCostEnd = currentEraData.itemPriceUSD / (currentEraData.goldPriceUSD || 1);
-  const goldCostChange = calculateChange(goldCostStart, goldCostEnd);
-
-  // BTC Cost (only if start year has BTC, which is unlikely for parents, so we handle it gracefully)
-  const btcCostStart = parentEraData.btcPriceUSD ? parentEraData.itemPriceUSD / parentEraData.btcPriceUSD : null;
-  const btcCostEnd = currentEraData.btcPriceUSD ? currentEraData.itemPriceUSD / currentEraData.btcPriceUSD : null;
-  const btcCostChange = (btcCostStart && btcCostEnd) ? calculateChange(btcCostStart, btcCostEnd) : null;
-
-  // SPY Cost — always available via the era-fallback to nearest year in BASE_FINANCIALS.
-  // For pre-1993 parent eras the value is the S&P 500 index ÷ 10 (SPY proxy).
-  const spyCostStart = parentEraData.spyPriceUSD ? parentEraData.itemPriceUSD / parentEraData.spyPriceUSD : null;
-  const spyCostEnd = currentEraData.spyPriceUSD ? currentEraData.itemPriceUSD / currentEraData.spyPriceUSD : null;
-  const spyCostChange = (spyCostStart && spyCostEnd) ? calculateChange(spyCostStart, spyCostEnd) : null;
-  const spyIsProxyPre1993 = parentEraYear < 1993;
-
-  // Filter data for the chart to start from the ACTUAL era year shown (so the chart and labels agree)
+  // Chart starts at the era year actually shown (so chart and labels agree)
   const filteredItem = useMemo(() => {
     return {
       ...selectedItem,
-      data: selectedItem.data.filter(d => d.year >= parentEraYear)
+      data: selectedItem.data.filter(d => d.year >= (parentEraData ? parentEraData.year : 0))
     };
-  }, [selectedItem, parentEraYear]);
+  }, [selectedItem, parentEraData]);
 
 
   return (
@@ -251,6 +232,7 @@ export default function AdvancedInsights() {
                       {ITEMS.map((item) => (
                         <SelectItem key={item.id} value={item.id} className="text-base py-3 cursor-pointer text-slate-900 focus:bg-slate-100 focus:text-slate-900 data-[state=checked]:font-semibold data-[state=checked]:text-slate-900">
                           <span className="mr-2">{item.emoji}</span> {item.name}
+                          {item.status === "estimate" && <span className="ml-1 text-xs text-amber-600">(estimate)</span>}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -321,12 +303,15 @@ export default function AdvancedInsights() {
                   <p className="font-mono text-xs uppercase mb-1 text-primary">Comparison Era</p>
                   <div className="flex items-center gap-2 mb-1">
                     <span>Parent's Era:</span>
-                    <span className="font-bold text-foreground">{parentEraYear}{parentEraWasFallback && <span className="text-xs text-muted-foreground font-normal"> (closest available)</span>}</span>
+                    <span className="font-bold text-foreground">{eraError ? "—" : parentEraLabel}{parentEraWasFallback && <span className="text-xs text-muted-foreground font-normal"> (nearest year with data to {parentChildbirthYear})</span>}</span>
                   </div>
                    <div className="flex items-center gap-2">
                     <span>Current Era:</span>
-                    <span className="font-bold text-foreground">{currentEraYear}{currentEraWasFallback && <span className="text-xs text-muted-foreground font-normal"> (closest available)</span>}</span>
+                    <span className="font-bold text-foreground">{currentEraLabel}<span className="text-xs text-muted-foreground font-normal"> (latest data)</span></span>
                   </div>
+                  {eraError && (
+                    <p className="mt-2 text-amber-400 text-sm" role="alert" data-testid="era-error">{eraError}</p>
+                  )}
                 </div>
 
               </CardContent>
@@ -338,29 +323,40 @@ export default function AdvancedInsights() {
                 <CardTitle className="text-lg text-blue-400">Key Insight</CardTitle>
                </CardHeader>
                <CardContent>
+                  {eraError || usdChange === null ? (
+                    <p className="text-base text-amber-400" data-testid="insight-error">
+                      {eraError ?? `No sourced ${selectedItem.name} price for that year.`} Pick a year between {selectedItem.data.find(d => d.itemPriceUSD !== null)?.label} and {currentEraLabel}.
+                    </p>
+                  ) : (
+                  <>
                   <p className="text-lg leading-relaxed">
-                    Since <span className="font-bold text-foreground">{parentEraYear}</span>, the cost of a <span className="font-bold text-foreground">{selectedItem.name}</span> has risen by <span className="font-bold text-red-400">{usdChange.toFixed(0)}%</span> in US Dollars.
+                    From <span className="font-bold text-foreground">{parentEraLabel}</span> to <span className="font-bold text-foreground">{currentEraLabel}</span>, the cost of a <span className="font-bold text-foreground">{selectedItem.name}</span> has {usdChange >= 0 ? "risen" : "fallen"} by <span className={`font-bold ${usdChange >= 0 ? "text-red-400" : "text-green-400"}`}>{formatPctAbs(usdChange)}%</span> in US Dollars.
                   </p>
-                  
+                  {anyUnverified && (
+                    <p className="text-xs text-amber-400 mt-2">One or both prices are unverified estimates.</p>
+                  )}
+
                   <Separator className="my-4 bg-yellow-500/20" />
-                  
-                  <p className="text-sm text-muted-foreground">
-                    <span className="text-yellow-500 font-semibold">Gold:</span> Priced in Gold, the cost has <span className={goldCostChange > 0 ? "text-red-400" : "text-green-400"}>
-                      {goldCostChange > 0 ? "increased" : "decreased"} by {Math.abs(goldCostChange).toFixed(0)}%
-                    </span>. Gold has historically preserved purchasing power against inflation.
-                  </p>
-                  
+
+                  {goldCostChange !== null && (
+                    <p className="text-sm text-muted-foreground">
+                      <span className="text-yellow-500 font-semibold">Gold:</span> Priced in gold, the cost has <span className={goldCostChange > 0 ? "text-red-400" : "text-green-400"}>
+                        {changeWord(goldCostChange)} by {formatPctAbs(goldCostChange)}%
+                      </span>.
+                    </p>
+                  )}
+
                   <Separator className="my-4 bg-orange-500/20" />
-                  
+
                   {btcCostChange !== null ? (
                     <p className="text-sm text-muted-foreground">
                       <span className="text-orange-500 font-semibold">Bitcoin:</span> Priced in Bitcoin, the cost has <span className={btcCostChange > 0 ? "text-red-400" : "text-green-400"}>
-                        {btcCostChange > 0 ? "increased" : "decreased"} by {Math.abs(btcCostChange).toFixed(0)}%
-                      </span>. Bitcoin's dramatic appreciation has significantly increased its purchasing power.
+                        {changeWord(btcCostChange)} by {formatPctAbs(btcCostChange)}%
+                      </span>.
                     </p>
                   ) : (
                     <p className="text-sm text-muted-foreground">
-                      <span className="text-orange-500 font-semibold">Bitcoin:</span> Bitcoin wasn't available in {parentEraYear} (launched in 2009). Try selecting a more recent year to see Bitcoin comparisons.
+                      <span className="text-orange-500 font-semibold">Bitcoin:</span> No Bitcoin market price in {parentEraLabel} (first market price: Jul 2010). Pick 2010 or later to compare in Bitcoin.
                     </p>
                   )}
 
@@ -369,11 +365,13 @@ export default function AdvancedInsights() {
                   {spyCostChange !== null && (
                     <p className="text-sm text-muted-foreground">
                       <span className="text-blue-400 font-semibold">S&amp;P 500 (SPY):</span> Priced in shares, the cost has <span className={spyCostChange > 0 ? "text-red-400" : "text-green-400"}>
-                        {spyCostChange > 0 ? "increased" : "decreased"} by {Math.abs(spyCostChange).toFixed(0)}%
+                        {changeWord(spyCostChange)} by {formatPctAbs(spyCostChange)}%
                       </span>. {spyIsProxyPre1993
-                        ? `SPY launched in 1993; the ${parentEraYear} figure uses the S&P 500 index as a proxy.`
-                        : `Broad equities have preserved purchasing power over this period.`}
+                        ? `SPY launched in 1993; the ${parentEraLabel} figure uses the S&P 500 index ÷ 10 as a proxy. Prices exclude dividends.`
+                        : `Share prices exclude dividends.`}
                     </p>
+                  )}
+                  </>
                   )}
 
                   <Button
@@ -381,6 +379,7 @@ export default function AdvancedInsights() {
                     variant="outline"
                     className="w-full mt-4 border-blue-500/40 text-blue-400 hover:bg-blue-500/10"
                     data-testid="button-share-era"
+                    disabled={usdChange === null}
                   >
                     <Share2 className="w-4 h-4 mr-2" />
                     Share my era with someone who'd relate
@@ -395,22 +394,23 @@ export default function AdvancedInsights() {
               <CardHeader>
                 <CardTitle>Cost Burden Evolution</CardTitle>
                 <CardDescription>
-                  Tracking the cost of {selectedItem.name} from {parentEraYear} to {currentEraYear}.
+                  Tracking the cost of {selectedItem.name} from {eraError ? "the first year with data" : parentEraLabel} to {currentEraLabel}.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <CostChart item={filteredItem} />
                 
+                {parentEraData && usdChange !== null && startUSD !== null && endUSD !== null && (
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="p-4 rounded-lg bg-card border border-border">
-                    <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Cost in {parentEraYear}</div>
-                    <div className="text-2xl font-bold">${parentEraData.itemPriceUSD.toLocaleString()}</div>
+                    <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Cost in {parentEraLabel}</div>
+                    <div className="text-2xl font-bold">${startUSD.toLocaleString()}{parentEraData.itemUnverified && <span className="text-amber-400 text-sm">*</span>}</div>
                     <div className="text-xs text-muted-foreground mt-1">USD (Nominal)</div>
                   </div>
-                  
+
                   <div className="p-4 rounded-lg bg-card border border-border">
-                    <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Cost in {currentEraYear}</div>
-                    <div className="text-2xl font-bold">${currentEraData.itemPriceUSD.toLocaleString()}</div>
+                    <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Cost in {currentEraLabel}</div>
+                    <div className="text-2xl font-bold">${endUSD.toLocaleString()}{currentEraData.itemUnverified && <span className="text-amber-400 text-sm">*</span>}</div>
                     <div className="text-xs text-muted-foreground mt-1">USD (Nominal)</div>
                   </div>
 
@@ -418,10 +418,15 @@ export default function AdvancedInsights() {
                      <div className={`absolute inset-0 opacity-10 ${usdChange > 0 ? 'bg-red-500' : 'bg-green-500'}`} />
                     <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Burden Shift</div>
                     <div className={`text-2xl font-bold ${usdChange > 0 ? 'text-red-400' : 'text-green-400'}`}>
-                      {usdChange > 0 ? '+' : ''}{usdChange.toFixed(0)}%
+                      {formatPctSigned(usdChange)}
                     </div>
                     <div className="text-xs text-muted-foreground mt-1">In USD terms</div>
                   </div>
+                </div>
+                )}
+
+                <div className="mt-6 border-t border-border/50 pt-4">
+                  <DataSources item={selectedItem} />
                 </div>
 
               </CardContent>
@@ -441,7 +446,7 @@ export default function AdvancedInsights() {
                       When a Boomer-era portfolio of cash, real estate, and retirement accounts lands on a millennial's desk,
                       the numbers above are what determines whether that handoff preserves a life or quietly erodes it.
                       <br/><br/>
-                      Holding cash over the last {currentEraYear - parentEraYear} years cost the average household the purchasing power you just saw.
+                      Holding cash over the last {eraError ? "several" : currentEraYear - parentEraYear} years cost the average household the purchasing power you just saw.
                       Scarce assets — real estate, gold, and for the next generation, Bitcoin — preserved it.
                       Understanding this isn't optional anymore. It's the foundation of the next decade.
                       <br/><br/>
