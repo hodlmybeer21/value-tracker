@@ -8,7 +8,7 @@ flagged (`unverifiedYears` / `status: "estimate"`) and shown as unverified in th
 |---|---|---|
 | Gold | Annual average USD/oz. 2026 YTD = Jan–Sep 2026 average (9 monthly values) | World Bank Pink Sheet, Oct 2026 release: [annual](https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Annual.xlsx), [monthly](https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx) |
 | Bitcoin | Dec 31 close. `null` before 2010 (no market price until Jul 2010). 2026 YTD = latest daily close on Oct 24, 2026 | [StatMuse Money](https://www.statmuse.com/money/ask/bitcoin-price-history-yearly) |
-| S&P 500 / SPY | Last trading-day close, not dividend-adjusted. 1970–1990 = ^GSPC ÷ 10; 1995+ = SPY. 2026 YTD = Oct 23, 2026 close | Yahoo Finance chart API (SPY, ^GSPC) |
+| S&P 500 / SPY | Last trading-day close, not dividend-adjusted. Before 1993 = ^GSPC ÷ 10; 1993+ = SPY (only 1970–1990 and 1995+ are used here). 2026 YTD = Oct 23, 2026 close | Yahoo Finance chart API (SPY, ^GSPC) |
 
 Bases are mixed on purpose and labeled in the UI (audit M1): gold and item prices are
 annual averages; Bitcoin and SPY are year-end closes.

@@ -70,7 +70,7 @@ export const ASSET_SOURCES = {
     ] as SourceRef[],
   },
   spy: {
-    basis: "Dec 31 close, not dividend-adjusted (Yahoo Finance). Before 1995: S&P 500 index ÷ 10 (SPY launched 1993). 2026 YTD = Oct 23, 2026 close.",
+    basis: "Dec 31 close, not dividend-adjusted (Yahoo Finance). Before 1993: S&P 500 index ÷ 10 (SPY launched Jan 1993). 2026 YTD = Oct 23, 2026 close.",
     sources: [
       { label: "Yahoo Finance, SPY history", url: "https://finance.yahoo.com/quote/SPY/history" },
       { label: "Yahoo Finance, S&P 500 (^GSPC) history", url: "https://finance.yahoo.com/quote/%5EGSPC/history" },
