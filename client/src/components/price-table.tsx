@@ -1,12 +1,13 @@
 import { ItemData } from "@/data/items";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { costIn } from "@/lib/era";
 
 interface PriceTableProps {
   item: ItemData;
 }
 
-const YEARS_TO_SHOW = [1970, 1980, 1990, 2000, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024, 2025];
+const YEARS_TO_SHOW = [1970, 1980, 1990, 2000, 2008, 2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024, 2025, 2026];
 
 export function PriceTable({ item }: PriceTableProps) {
   // Filter data for selected years
@@ -14,24 +15,25 @@ export function PriceTable({ item }: PriceTableProps) {
     const point = item.data.find(d => d.year === year);
     if (!point) return null;
 
-    // Calculate Gold Price (oz), BTC Price, and SPY Shares
-    // Avoid division by zero
-    const goldCost = point.goldPriceUSD ? point.itemPriceUSD / point.goldPriceUSD : 0;
-    const btcCost = point.btcPriceUSD ? point.itemPriceUSD / point.btcPriceUSD : null;
-    const spyCost = point.spyPriceUSD ? point.itemPriceUSD / point.spyPriceUSD : null;
+    // Cost in gold (oz), BTC and SPY shares. null = no data / no market.
+    const goldCost = costIn(point.itemPriceUSD, point.goldPriceUSD);
+    const btcCost = costIn(point.itemPriceUSD, point.btcPriceUSD);
+    const spyCost = costIn(point.itemPriceUSD, point.spyPriceUSD);
 
     return {
       year,
+      label: point.label,
+      unverified: point.itemUnverified,
       usd: point.itemPriceUSD,
       gold: goldCost,
       btc: btcCost,
       spy: spyCost,
     };
-  }).filter(Boolean) as { year: number; usd: number; gold: number; btc: number | null; spy: number | null }[];
+  }).filter(Boolean) as { year: number; label: string; unverified: boolean; usd: number | null; gold: number | null; btc: number | null; spy: number | null }[];
 
   // Helper to format numbers
   const formatValue = (val: number | null, type: 'usd' | 'gold' | 'btc' | 'spy') => {
-    if (val === null) return "";
+    if (val === null) return "—";
     
     if (type === 'usd') {
       return val.toFixed(2);
@@ -93,7 +95,8 @@ export function PriceTable({ item }: PriceTableProps) {
               <th className="p-3 font-mono text-xs uppercase tracking-widest text-muted-foreground bg-white dark:bg-slate-950 sticky left-0 z-20 border-r border-border">Currency</th>
               {tableData.map(d => (
                 <th key={d.year} className="p-3 font-mono font-bold border-l border-border/20 min-w-[80px]">
-                  {d.year}
+                  {d.label}
+                  {d.unverified && <span className="text-amber-400" title="Unverified price">*</span>}
                 </th>
               ))}
             </tr>
@@ -124,7 +127,7 @@ export function PriceTable({ item }: PriceTableProps) {
               <td className="p-3 font-bold text-left bg-white dark:bg-slate-950 sticky left-0 z-20 border-r border-border shadow-[4px_0_12px_-4px_rgba(0,0,0,0.1)] text-chart-3">Bitcoin (BTC)</td>
               {tableData.map((d, i) => (
                 <td key={d.year} className={cn("p-2 border-l border-border/20 transition-colors", getColorClass(d.btc, btcValues))}>
-                  {formatValue(d.btc, 'btc')}
+                  {d.btc === null && d.usd !== null && d.year < 2010 ? <span className="text-xs text-muted-foreground">no market yet</span> : formatValue(d.btc, 'btc')}
                 </td>
               ))}
             </tr>
@@ -140,6 +143,10 @@ export function PriceTable({ item }: PriceTableProps) {
             </tr>
           </tbody>
         </table>
+        <p className="px-4 py-3 text-xs text-muted-foreground text-left border-t border-border/50">
+          — = no sourced value for that year. <span className="text-amber-400">*</span> = unverified price.
+          Bitcoin had no market price before Jul 2010.
+        </p>
       </CardContent>
     </Card>
   );

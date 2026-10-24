@@ -10,6 +10,7 @@ import {
   Legend,
 } from "recharts";
 import { ItemData } from "@/data/items";
+import { prefersReducedMotion } from "@/lib/motion";
 
 interface BitcoinChartProps {
   item: ItemData;
@@ -20,15 +21,17 @@ export function BitcoinChart({ item }: BitcoinChartProps) {
     // Filter for years where BTC data exists and is non-zero
     // We also want to filter out the very early "pennies" years if they skew the graph too wildly,
     // but a log scale should handle it.
-    const btcData = item.data.filter(d => d.btcPriceUSD && d.btcPriceUSD > 0);
+    // Only years with a real market price (Bitcoin had none before Jul 2010)
+    // and a priced item.
+    const btcData = item.data.filter(d => d.btcPriceUSD && d.btcPriceUSD > 0 && d.itemPriceUSD !== null);
     
     if (!btcData.length) return [];
 
     return btcData.map((point) => {
-      const costBTC = point.btcPriceUSD ? point.itemPriceUSD / point.btcPriceUSD : null;
+      const costBTC = point.btcPriceUSD && point.itemPriceUSD !== null ? point.itemPriceUSD / point.btcPriceUSD : null;
 
       return {
-        year: point.year,
+        year: point.label,
         rawBTC: costBTC,
       };
     });
@@ -99,6 +102,7 @@ export function BitcoinChart({ item }: BitcoinChartProps) {
           />
 
           <Line
+            isAnimationActive={!prefersReducedMotion()}
             type="monotone"
             dataKey="rawBTC"
             name="Bitcoin Cost (Deflationary View)"

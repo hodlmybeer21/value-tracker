@@ -9,7 +9,8 @@
     "build": "vite build",
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "test": "tsx --test client/src/lib/*.test.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
